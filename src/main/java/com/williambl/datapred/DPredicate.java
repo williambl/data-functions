@@ -3,11 +3,15 @@ package com.williambl.datapred;
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
@@ -20,6 +24,10 @@ public interface DPredicate<T> extends Predicate<T> {
     KeyDispatchDataCodec<? extends DPredicate<T>> codec();
 
     RegistryAndCodec<DPredicate<Entity>> ENTITY_PREDICATE_CODEC_REGISTRY = createRegistry(id("entity_predicate"));
+    RegistryAndCodec<DPredicate<ItemStack>> ITEMSTACK_PREDICATE_CODEC_REGISTRY = createRegistry(id("itemstack_predicate"));
+    RegistryAndCodec<DPredicate<BlockInWorld>> BLOCK_IN_WORLD_PREDICATE_CODEC_REGISTRY = createRegistry(id("block_in_world_predicate"));
+    RegistryAndCodec<DPredicate<Pair<Entity, Entity>>> BI_ENTITY_PREDICATE_CODEC_REGISTRY = createRegistry(id("bi_entity_predicate"));
+    RegistryAndCodec<DPredicate<Pair<DamageSource, Float>>> DAMAGE_PREDICATE_CODEC_REGISTRY = createRegistry(id("damage_predicate"));
 
     static <T> Codec<? extends DPredicate<T>> create(Predicate<T> function) {
         return DPredicateImplementations.DPredicate0.create(function);
