@@ -54,7 +54,7 @@ java {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/datapackable-predicates.accesswidener")
+	accessWidenerPath = file("src/main/resources/dpred.accesswidener")
 }
 
 jar {

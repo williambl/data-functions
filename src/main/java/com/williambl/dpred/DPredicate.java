@@ -1,4 +1,4 @@
-package com.williambl.datapred;
+package com.williambl.dpred;
 
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
@@ -6,19 +6,17 @@ import com.mojang.datafixers.util.Function5;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import static com.williambl.datapred.DatapackablePredicates.id;
-import static com.williambl.datapred.RegistryAndCodec.createRegistry;
+import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dpred.RegistryAndCodec.createRegistry;
 
 public interface DPredicate<T> extends Predicate<T> {
     KeyDispatchDataCodec<? extends DPredicate<T>> codec();

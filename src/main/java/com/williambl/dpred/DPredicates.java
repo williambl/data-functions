@@ -1,4 +1,4 @@
-package com.williambl.datapred;
+package com.williambl.dpred;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
@@ -7,7 +7,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.material.Fluid;
 
-import static com.williambl.datapred.DatapackablePredicates.id;
+import static com.williambl.dpred.DatapackablePredicates.id;
 
 public class DPredicates {
     public static final Codec<? extends DPredicate<Entity>> IS_SUBMERGED_IN = Registry.register(

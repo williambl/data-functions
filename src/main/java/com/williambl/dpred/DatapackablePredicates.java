@@ -1,4 +1,4 @@
-package com.williambl.datapred;
+package com.williambl.dpred;
 
 import net.fabricmc.api.ModInitializer;
 
@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DatapackablePredicates implements ModInitializer {
-	public static final String MODID = "datapackable-predicates";
+	public static final String MODID = "dpred";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
 	public static ResourceLocation id(String path) {
