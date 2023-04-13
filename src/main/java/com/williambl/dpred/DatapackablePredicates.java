@@ -1,5 +1,7 @@
 package com.williambl.dpred;
 
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.ResourceLocation;
@@ -16,5 +18,6 @@ public class DatapackablePredicates implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		EntityDPredicates.init();
 	}
 }
