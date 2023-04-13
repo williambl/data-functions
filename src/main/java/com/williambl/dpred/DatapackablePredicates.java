@@ -19,5 +19,6 @@ public class DatapackablePredicates implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		EntityDPredicates.init();
+		BiEntityDPredicates.init();
 	}
 }
