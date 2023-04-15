@@ -6,6 +6,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * Holds a registry and a codec for DPredicateTypes.
+ * @param registry  the registry
+ * @param codec     the codec
+ * @param <T>       the type the DPredicates test
+ */
 record DPredicateTypeRegistry<T>(Registry<DPredicateType<T, ?>> registry, Codec<DPredicate<T>> codec) {
     static <T> DPredicateTypeRegistry<T> createRegistry(ResourceLocation name) {
         ResourceKey<Registry<DPredicateType<T, ?>>> key = ResourceKey.createRegistryKey(name);

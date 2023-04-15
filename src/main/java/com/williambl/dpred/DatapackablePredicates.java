@@ -13,7 +13,7 @@ import net.minecraft.util.ExtraCodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatapackablePredicates implements ModInitializer {
+public final class DatapackablePredicates implements ModInitializer {
 	public static final String MODID = "dpred";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 

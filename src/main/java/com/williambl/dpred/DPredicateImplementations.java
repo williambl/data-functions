@@ -13,8 +13,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class DPredicateImplementations {
-    static class DPredicate4<A, B, C, D, T> implements DPredicate<T> {
+public final class DPredicateImplementations {
+    static final class DPredicate4<A, B, C, D, T> implements DPredicate<T> {
         private final Supplier<DPredicateType<T, ?>> typeSupplier;
         private final Function5<A, B, C, D, T, Boolean> function;
         private final A a;
@@ -55,7 +55,7 @@ public class DPredicateImplementations {
         }
     }
 
-    static class DPredicate3<A, B, C, T> implements DPredicate<T> {
+    static final class DPredicate3<A, B, C, T> implements DPredicate<T> {
         private final Supplier<DPredicateType<T, ?>> typeSupplier;
         private final Function4<A, B, C, T, Boolean> function;
         private final A a;
@@ -93,7 +93,7 @@ public class DPredicateImplementations {
         }
     }
 
-    static class DPredicate2<A, B, T> implements DPredicate<T> {
+    static final class DPredicate2<A, B, T> implements DPredicate<T> {
         private final Supplier<DPredicateType<T, ?>> typeSupplier;
         private final Function3<A, B, T, Boolean> function;
         private final A a;
@@ -128,7 +128,7 @@ public class DPredicateImplementations {
         }
     }
 
-    static class DPredicate1<A, T> implements DPredicate<T> {
+    static final class DPredicate1<A, T> implements DPredicate<T> {
         private final Supplier<DPredicateType<T, ?>> typeSupplier;
         private final BiFunction<A, T, Boolean> function;
         private final A a;
@@ -160,7 +160,7 @@ public class DPredicateImplementations {
         }
     }
 
-    static class DPredicate0<T> implements DPredicate<T> {
+    static final class DPredicate0<T> implements DPredicate<T> {
         private final Predicate<T> function;
         private final Supplier<DPredicateType<T, ?>> typeSupplier;
 
