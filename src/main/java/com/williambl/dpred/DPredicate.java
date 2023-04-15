@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.function.BiFunction;
@@ -37,6 +38,7 @@ public interface DPredicate<T> extends Predicate<T> {
     DPredicateTypeRegistry<BlockInWorld> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"));
     DPredicateTypeRegistry<Pair<Entity, Entity>> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"));
     DPredicateTypeRegistry<Double> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"));
+    DPredicateTypeRegistry<Level> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"));
 
     /**
      * Create a new DPredicate with no parameters.

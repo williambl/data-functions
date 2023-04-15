@@ -13,6 +13,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
@@ -58,6 +59,14 @@ public final class EntityDPredicates {
                     (predicate, e) -> !predicate.test(e)
             )
     );
+
+    public static final DPredicateType<Entity, ? extends Function<DPredicate<Level>, ? extends DPredicate<Entity>>> LEVEL_PREDICATE = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("level_predicate"),
+            DPredicate.<DPredicate<Level>, Entity>create(
+                    DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> predicate.test(e.level)
+            ));
 
     public static final DPredicateType<Entity, ? extends Function<EntityPredicate, ? extends DPredicate<Entity>>> ADVANCEMENT_PREDICATE = Registry.register(
             DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),

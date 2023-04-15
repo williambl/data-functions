@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.williambl.dpred.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "GameRulesAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

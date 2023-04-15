@@ -29,5 +29,6 @@ public final class DatapackablePredicates implements ModInitializer {
 		BiEntityDPredicates.init();
 		BlockInWorldDPredicates.init();
 		NumberDPredicates.init();
+		LevelDPredicates.init();
 	}
 }

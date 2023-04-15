@@ -6,6 +6,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.material.Fluid;
 
@@ -51,6 +53,14 @@ public final class BlockInWorldDPredicates {
                     (predicate, block) -> !predicate.test(block)
             )
     );
+
+    public static final DPredicateType<BlockInWorld, ? extends Function<DPredicate<Level>, ? extends DPredicate<BlockInWorld>>> LEVEL_PREDICATE = Registry.register(
+            DPredicate.BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY.registry(),
+            id("level_predicate"),
+            DPredicate.<DPredicate<Level>, BlockInWorld>create(
+                    DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, block) -> block.getLevel() instanceof Level level && predicate.test(level)
+            ));
 
     public static final DPredicateType<BlockInWorld, ? extends Function<BlockPredicate, ? extends DPredicate<BlockInWorld>>> ADVANCEMENT_PREDICATE = Registry.register(
             DPredicate.BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY.registry(),

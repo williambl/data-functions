@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.function.Function;
@@ -91,6 +92,14 @@ public final class BiEntityDPredicates {
                     (predicate, entities) -> predicate.test(entities) || predicate.test(Pair.of(entities.getSecond(), entities.getFirst()))
             )
     );
+
+    public static final DPredicateType<Pair<Entity, Entity>, ? extends Function<DPredicate<Level>, ? extends DPredicate<Pair<Entity, Entity>>>> LEVEL_PREDICATE = Registry.register(
+            DPredicate.BI_ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("level_predicate"),
+            DPredicate.<DPredicate<Level>, Pair<Entity, Entity>>create(
+                    DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> predicate.test(e.getFirst().level)
+            ));
 
     static void init() {}
 }
