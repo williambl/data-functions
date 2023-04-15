@@ -3,13 +3,13 @@
 	"id": "dpred",
 	"version": "${version}",
 	"name": "Datapackable Predicates",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Allows for data-driven predicates for all sorts of things in-game.",
 	"authors": [
-		"Me!"
+		"Will BL"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/williambl/datapackable-predicates",
+		"sources": "https://github.com/williambl/datapackable-predicates"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/dpred/icon.png",
@@ -20,9 +20,7 @@
 		]
 	},
 	"mixins": [
-      "dpred.mixins.json"
 	],
-	"accessWidener": "dpred.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.14.19",
 		"minecraft": "~1.19.4",
@@ -30,6 +28,5 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
 	}
 }

@@ -54,7 +54,6 @@ java {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/dpred.accesswidener")
 }
 
 jar {
