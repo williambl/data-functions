@@ -2,8 +2,10 @@ package com.williambl.dpred;
 
 import com.mojang.datafixers.types.Func;
 import com.mojang.serialization.Codec;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +53,14 @@ public final class EntityDPredicates {
                     (predicate, e) -> !predicate.test(e)
             )
     );
+
+    public static final DPredicateType<Entity, ? extends Function<EntityPredicate, ? extends DPredicate<Entity>>> ADVANCEMENT_PREDICATE = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("advancement_predicate"),
+            DPredicate.<EntityPredicate, Entity>create(
+                    DatapackablePredicates.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
+                    (predicate, e) -> e.level instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e)
+            ));
 
     public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> ON_FIRE = Registry.register(
             DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
