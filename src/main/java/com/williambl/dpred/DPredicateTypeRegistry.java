@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
  * @param codec     the codec
  * @param <T>       the type the DPredicates test
  */
-record DPredicateTypeRegistry<T>(Registry<DPredicateType<T, ?>> registry, Codec<DPredicate<T>> codec) {
+public record DPredicateTypeRegistry<T>(Registry<DPredicateType<T, ?>> registry, Codec<DPredicate<T>> codec) {
     static <T> DPredicateTypeRegistry<T> createRegistry(ResourceLocation name) {
         ResourceKey<Registry<DPredicateType<T, ?>>> key = ResourceKey.createRegistryKey(name);
         Registry<DPredicateType<T, ?>> registry = FabricRegistryBuilder.createSimple(key).buildAndRegister();
