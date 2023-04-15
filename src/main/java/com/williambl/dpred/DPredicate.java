@@ -25,7 +25,6 @@ public interface DPredicate<T> extends Predicate<T> {
     DPredicateTypeRegistry<ItemStack> ITEMSTACK_PREDICATE_TYPE_REGISTRY = createRegistry(id("itemstack_predicate"));
     DPredicateTypeRegistry<BlockInWorld> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"));
     DPredicateTypeRegistry<Pair<Entity, Entity>> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"));
-    DPredicateTypeRegistry<Pair<DamageSource, Float>> DAMAGE_PREDICATE_TYPE_REGISTRY = createRegistry(id("damage_predicate"));
 
     static <T> DPredicateType<T, ? extends Supplier<? extends DPredicate<T>>> create(Predicate<T> function) {
         return DPredicateImplementations.DPredicate0.create(function);
