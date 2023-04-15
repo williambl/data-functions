@@ -1,8 +1,6 @@
 package com.williambl.dpred;
 
-import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.advancements.critereon.BlockPredicate;
@@ -30,5 +28,6 @@ public final class DatapackablePredicates implements ModInitializer {
 		EntityDPredicates.init();
 		BiEntityDPredicates.init();
 		BlockInWorldDPredicates.init();
+		NumberDPredicates.init();
 	}
 }

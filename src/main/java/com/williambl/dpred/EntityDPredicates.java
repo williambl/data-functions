@@ -1,17 +1,22 @@
 package com.williambl.dpred;
 
 import com.mojang.datafixers.types.Func;
+import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -62,6 +67,13 @@ public final class EntityDPredicates {
                     (predicate, e) -> e.level instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e)
             ));
 
+    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> DEAD_OR_DYING = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("dead_or_dying"),
+            DPredicate.create(
+                    e -> e instanceof LivingEntity l && l.isDeadOrDying()
+            ));
+
     public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> ON_FIRE = Registry.register(
             DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("on_fire"),
@@ -110,6 +122,25 @@ public final class EntityDPredicates {
                     (f, e) -> e.isEyeInFluid(f)
             )
     );
+
+    public static final DPredicateType<Entity, ? extends Function<DPredicate<Double>, ? extends DPredicate<Entity>>> AGE = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("age"),
+            DPredicate.<DPredicate<Double>, Entity>create(
+                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> predicate.test((double) e.tickCount)
+            ));
+
+    public static final DPredicateType<Entity, ? extends Function3<Attribute, DPredicate<Double>, Boolean, ? extends DPredicate<Entity>>> ATTRIBUTE_VALUE = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("attribute_value"),
+            DPredicate.<Attribute, DPredicate<Double>, Boolean, Entity>create(
+                    BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute"),
+                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    Codec.BOOL.optionalFieldOf("relative_to_base", false),
+                    (attr, predicate, relative, e) -> e instanceof LivingEntity l
+                            && predicate.test(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))
+            ));
 
     static void init() {}
 }
