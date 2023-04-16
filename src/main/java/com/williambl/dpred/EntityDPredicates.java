@@ -13,6 +13,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
@@ -150,6 +151,23 @@ public final class EntityDPredicates {
                     (attr, predicate, relative, e) -> e instanceof LivingEntity l
                             && predicate.test(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))
             ));
+
+    public static final DPredicateType<Entity, ? extends Function<DPredicate<Double>, ? extends DPredicate<Entity>>> HEALTH = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("health"),
+            DPredicate.<DPredicate<Double>, Entity>create(
+                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> e instanceof LivingEntity l && predicate.test((double) l.getHealth())));
+
+    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> CAN_SEE_SKY = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("can_see_sky"),
+            DPredicate.<Entity>create(e -> e.getLevel().canSeeSky(e.blockPosition())));
+
+    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> IS_SURVIVAL_LIKE = Registry.register(
+            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+            id("is_survival_like"),
+            DPredicate.<Entity>create(e -> !e.isSpectator() && !(e instanceof Player p && p.isCreative())));
 
     static void init() {}
 }

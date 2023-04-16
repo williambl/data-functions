@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.williambl.dpred.DatapackablePredicates.id;
 
@@ -78,6 +79,16 @@ public final class LevelDPredicates {
                             .map(v -> v instanceof GameRules.IntegerValue i ? (double) i.get() : v instanceof DoubleRule d ? d.get() : null)
                             .map(predicate::test)
                             .orElse(false)));
+
+    public static final DPredicateType<Level, ? extends Supplier<? extends DPredicate<Level>>> IS_DAY = Registry.register(
+            DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
+            id("is_day"),
+            DPredicate.<Level>create(Level::isDay));
+
+    public static final DPredicateType<Level, ? extends Supplier<? extends DPredicate<Level>>> IS_RAINING = Registry.register(
+            DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
+            id("is_raining"),
+            DPredicate.<Level>create(Level::isRaining));
 
     static void init() {}
 }
