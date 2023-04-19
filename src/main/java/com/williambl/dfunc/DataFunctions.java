@@ -1,4 +1,4 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.api.ModInitializer;
@@ -11,8 +11,8 @@ import net.minecraft.util.ExtraCodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DatapackablePredicates implements ModInitializer {
-	public static final String MODID = "dpred";
+public final class DataFunctions implements ModInitializer {
+	public static final String MODID = "dfunc";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
 	public static final Codec<EntityPredicate> ADVANCEMENT_ENTITY_PREDICATE_CODEC = ExtraCodecs.JSON.xmap(EntityPredicate::fromJson, EntityPredicate::serializeToJson);

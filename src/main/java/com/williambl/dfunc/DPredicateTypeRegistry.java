@@ -1,4 +1,4 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;

@@ -1,16 +1,14 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Registry;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class ItemStackDPredicates {
     public static final DPredicateType<ItemStack, ? extends Function<Boolean, ? extends DPredicate<ItemStack>>> CONSTANT = Registry.register(
@@ -53,7 +51,7 @@ public final class ItemStackDPredicates {
             DPredicate.ITEMSTACK_PREDICATE_TYPE_REGISTRY.registry(),
             id("advancement_predicate"),
             DPredicate.<ItemPredicate, ItemStack>create(
-                    DatapackablePredicates.ADVANCEMENT_ITEM_PREDICATE_CODEC.fieldOf("predicate"),
+                    DataFunctions.ADVANCEMENT_ITEM_PREDICATE_CODEC.fieldOf("predicate"),
                     ItemPredicate::matches)
             );
 

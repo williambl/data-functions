@@ -1,4 +1,4 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class NumberDPredicates {
     public static final DPredicateType<Double, ? extends Function<Boolean, ? extends DPredicate<Double>>> CONSTANT = Registry.register(

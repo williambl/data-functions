@@ -1,4 +1,4 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class BiEntityDPredicates {
     public static final DPredicateType<Pair<Entity, Entity>, ? extends Function<Boolean, ? extends DPredicate<Pair<Entity, Entity>>>> CONSTANT = Registry.register(

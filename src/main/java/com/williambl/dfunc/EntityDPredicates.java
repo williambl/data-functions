@@ -1,13 +1,11 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
-import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -18,11 +16,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class EntityDPredicates {
     public static final DPredicateType<Entity, ? extends Function<Boolean, ? extends DPredicate<Entity>>> CONSTANT = Registry.register(
@@ -73,7 +70,7 @@ public final class EntityDPredicates {
             DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("advancement_predicate"),
             DPredicate.<EntityPredicate, Entity>create(
-                    DatapackablePredicates.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
+                    DataFunctions.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
                     (predicate, e) -> e.level instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e)
             ));
 

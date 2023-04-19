@@ -1,21 +1,16 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class BlockInWorldDPredicates {
     public static final DPredicateType<BlockInWorld, ? extends Function<Boolean, ? extends DPredicate<BlockInWorld>>> CONSTANT = Registry.register(
@@ -66,7 +61,7 @@ public final class BlockInWorldDPredicates {
             DPredicate.BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY.registry(),
             id("advancement_predicate"),
             DPredicate.<BlockPredicate, BlockInWorld>create(
-                    DatapackablePredicates.ADVANCEMENT_BLOCK_PREDICATE_CODEC.fieldOf("predicate"),
+                    DataFunctions.ADVANCEMENT_BLOCK_PREDICATE_CODEC.fieldOf("predicate"),
                     (predicate, block) -> block.getLevel() instanceof ServerLevel sLevel && predicate.matches(sLevel, block.getPos())
             ));
 

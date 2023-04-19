@@ -1,11 +1,10 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -16,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
-import static com.williambl.dpred.DPredicateTypeRegistry.createRegistry;
+import static com.williambl.dfunc.DataFunctions.id;
+import static com.williambl.dfunc.DPredicateTypeRegistry.createRegistry;
 
 /**
  * A data-defined predicate.

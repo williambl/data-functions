@@ -1,4 +1,4 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;

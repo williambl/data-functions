@@ -1,7 +1,7 @@
-package com.williambl.dpred;
+package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
-import com.williambl.dpred.mixin.GameRulesAccessor;
+import com.williambl.dfunc.mixin.GameRulesAccessor;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.GameRules;
@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.williambl.dpred.DatapackablePredicates.id;
+import static com.williambl.dfunc.DataFunctions.id;
 
 public final class LevelDPredicates {
     public static final DPredicateType<Level, ? extends Function<Boolean, ? extends DPredicate<Level>>> CONSTANT = Registry.register(
