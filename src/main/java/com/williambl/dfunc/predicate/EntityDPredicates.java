@@ -1,7 +1,10 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DataFunctions;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -137,5 +140,5 @@ public final class EntityDPredicates {
             id("is_survival_like"),
             DFunction.<Entity, Boolean>create(e -> !e.isSpectator() && !(e instanceof Player p && p.isCreative())));
 
-    static void init() {}
+    public static void init() {}
 }

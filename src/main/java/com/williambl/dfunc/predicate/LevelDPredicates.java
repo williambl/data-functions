@@ -1,6 +1,8 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.minecraft.core.Registry;
@@ -82,5 +84,5 @@ public final class LevelDPredicates {
             id("is_raining"),
             DFunction.<Level, Boolean>create(Level::isRaining));
 
-    static void init() {}
+    public static void init() {}
 }

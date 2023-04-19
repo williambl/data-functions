@@ -1,6 +1,7 @@
 package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.predicate.*;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.advancements.critereon.BlockPredicate;

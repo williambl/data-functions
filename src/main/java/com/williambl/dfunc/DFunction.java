@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -32,12 +33,12 @@ public interface DFunction<T, R> extends Function<T, R> {
      */
     DFunctionType<T, R, ?> type();
 
-    DFunctionTypeRegistry<Entity, Boolean> ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("entity_predicate"));
-    DFunctionTypeRegistry<ItemStack, Boolean> ITEMSTACK_PREDICATE_TYPE_REGISTRY = createRegistry(id("itemstack_predicate"));
-    DFunctionTypeRegistry<BlockInWorld, Boolean> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"));
-    DFunctionTypeRegistry<Pair<Entity, Entity>, Boolean> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"));
-    DFunctionTypeRegistry<Double, Boolean> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"));
-    DFunctionTypeRegistry<Level, Boolean> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"));
+    DFunctionTypeRegistry<Entity, Boolean> ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("entity_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<ItemStack, Boolean> ITEMSTACK_PREDICATE_TYPE_REGISTRY = createRegistry(id("itemstack_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<BlockInWorld, Boolean> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<Pair<Entity, Entity>, Boolean> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<Double, Boolean> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<Level, Boolean> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"), Codec.BOOL);
 
     /**
      * Create a new DPredicate with no parameters.

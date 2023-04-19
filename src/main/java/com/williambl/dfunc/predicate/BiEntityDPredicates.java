@@ -1,7 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -83,5 +85,5 @@ public final class BiEntityDPredicates {
                     (predicate, e) -> predicate.apply(e.getFirst().level)
             ));
 
-    static void init() {}
+    public static void init() {}
 }

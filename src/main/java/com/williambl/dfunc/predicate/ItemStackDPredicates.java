@@ -1,6 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DataFunctions;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.ItemStack;

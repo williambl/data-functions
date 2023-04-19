@@ -1,6 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.Comparison;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
 import net.minecraft.core.Registry;
 
 import java.util.List;
@@ -54,5 +57,5 @@ public final class NumberDPredicates {
                     DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
                     (modulo, predicate, n) -> predicate.apply(n % modulo)));
 
-    static void init() {}
+    public static void init() {}
 }

@@ -1,6 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.predicate;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunction;
+import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DataFunctions;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
@@ -61,5 +64,5 @@ public final class BlockInWorldDPredicates {
                     (predicate, block) -> block.getLevel() instanceof ServerLevel sLevel && predicate.matches(sLevel, block.getPos())
             ));
 
-    static void init() {}
+    public static void init() {}
 }
