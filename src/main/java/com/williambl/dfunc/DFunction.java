@@ -39,6 +39,7 @@ public interface DFunction<T, R> extends Function<T, R> {
     DFunctionTypeRegistry<Pair<Entity, Entity>, Boolean> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"), Codec.BOOL);
     DFunctionTypeRegistry<Double, Boolean> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"), Codec.BOOL);
     DFunctionTypeRegistry<Level, Boolean> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<Entity, Double> ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY = createRegistry(id("entity_to_number_function"), Codec.DOUBLE);
 
     /**
      * Create a new DPredicate with no parameters.
