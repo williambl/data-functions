@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.williambl.dfunc.DataFunctions.id;
-import static com.williambl.dfunc.DPredicateTypeRegistry.createRegistry;
+import static com.williambl.dfunc.DFunctionTypeRegistry.createRegistry;
 
 /**
  * A data-defined predicate.
@@ -25,27 +25,27 @@ import static com.williambl.dfunc.DPredicateTypeRegistry.createRegistry;
  * four parameters, implement this interface yourself.
  * @param <T>   the type the predicate tests
  */
-public interface DPredicate<T> extends Predicate<T> {
+public interface DFunction<T, R> extends Function<T, R> {
     /**
      * Get this DPredicate's type.
      * @return this DPredicate's type
      */
-    DPredicateType<T, ?> type();
+    DFunctionType<T, R, ?> type();
 
-    DPredicateTypeRegistry<Entity> ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("entity_predicate"));
-    DPredicateTypeRegistry<ItemStack> ITEMSTACK_PREDICATE_TYPE_REGISTRY = createRegistry(id("itemstack_predicate"));
-    DPredicateTypeRegistry<BlockInWorld> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"));
-    DPredicateTypeRegistry<Pair<Entity, Entity>> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"));
-    DPredicateTypeRegistry<Double> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"));
-    DPredicateTypeRegistry<Level> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"));
+    DFunctionTypeRegistry<Entity, Boolean> ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("entity_predicate"));
+    DFunctionTypeRegistry<ItemStack, Boolean> ITEMSTACK_PREDICATE_TYPE_REGISTRY = createRegistry(id("itemstack_predicate"));
+    DFunctionTypeRegistry<BlockInWorld, Boolean> BLOCK_IN_WORLD_PREDICATE_TYPE_REGISTRY = createRegistry(id("block_in_world_predicate"));
+    DFunctionTypeRegistry<Pair<Entity, Entity>, Boolean> BI_ENTITY_PREDICATE_TYPE_REGISTRY = createRegistry(id("bi_entity_predicate"));
+    DFunctionTypeRegistry<Double, Boolean> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"));
+    DFunctionTypeRegistry<Level, Boolean> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"));
 
     /**
      * Create a new DPredicate with no parameters.
      * @param function  the predicate function
      * @return          a DPredicate type
      */
-    static <T> DPredicateType<T, ? extends Supplier<? extends DPredicate<T>>> create(Predicate<T> function) {
-        return DPredicateImplementations.DPredicate0.create(function);
+    static <T, R> DFunctionType<T, R, ? extends Supplier<? extends DFunction<T, R>>> create(Function<T, R> function) {
+        return DFunctionImplementations.DFunction0.create(function);
     }
 
     /**
@@ -54,8 +54,8 @@ public interface DPredicate<T> extends Predicate<T> {
      * @param function  the predicate function
      * @return          a DPredicate type
      */
-    static <A, T> DPredicateType<T, ? extends Function<A, ? extends DPredicate<T>>> create(MapCodec<A> codecA, BiFunction<A, T, Boolean> function) {
-        return DPredicateImplementations.DPredicate1.create(codecA, function);
+    static <A, T, R> DFunctionType<T, R, ? extends Function<A, ? extends DFunction<T, R>>> create(MapCodec<A> codecA, BiFunction<A, T, R> function) {
+        return DFunctionImplementations.DFunction1.create(codecA, function);
     }
 
     /**
@@ -65,8 +65,8 @@ public interface DPredicate<T> extends Predicate<T> {
      * @param function  the predicate function
      * @return          a DPredicate type
      */
-    static <A, B, T> DPredicateType<T, ? extends BiFunction<A, B, ? extends DPredicate<T>>> create(MapCodec<A> codecA, MapCodec<B> codecB, Function3<A, B, T, Boolean> function) {
-        return DPredicateImplementations.DPredicate2.create(codecA, codecB, function);
+    static <A, B, T, R> DFunctionType<T, R, ? extends BiFunction<A, B, ? extends DFunction<T, R>>> create(MapCodec<A> codecA, MapCodec<B> codecB, Function3<A, B, T, R> function) {
+        return DFunctionImplementations.DFunction2.create(codecA, codecB, function);
     }
 
     /**
@@ -77,8 +77,8 @@ public interface DPredicate<T> extends Predicate<T> {
      * @param function  the predicate function
      * @return          a DPredicate type
      */
-    static <A, B, C, T> DPredicateType<T, ? extends Function3<A, B, C, ? extends DPredicate<T>>> create(MapCodec<A> codecA, MapCodec<B> codecB, MapCodec<C> codecC, Function4<A, B, C, T, Boolean> function) {
-        return DPredicateImplementations.DPredicate3.create(codecA, codecB, codecC, function);
+    static <A, B, C, T, R> DFunctionType<T, R, ? extends Function3<A, B, C, ? extends DFunction<T, R>>> create(MapCodec<A> codecA, MapCodec<B> codecB, MapCodec<C> codecC, Function4<A, B, C, T, R> function) {
+        return DFunctionImplementations.DFunction3.create(codecA, codecB, codecC, function);
     }
 
     /**
@@ -90,7 +90,7 @@ public interface DPredicate<T> extends Predicate<T> {
      * @param function  the predicate function
      * @return          a DPredicate type
      */
-    static <A, B, C, D, T> DPredicateType<T, ? extends Function4<A, B, C, D, ? extends DPredicate<T>>> create(MapCodec<A> codecA, MapCodec<B> codecB, MapCodec<C> codecC, MapCodec<D> codecD, Function5<A, B, C, D, T, Boolean> function) {
-        return DPredicateImplementations.DPredicate4.create(codecA, codecB, codecC, codecD, function);
+    static <A, B, C, D, T, R> DFunctionType<T, R, ? extends Function4<A, B, C, D, ? extends DFunction<T, R>>> create(MapCodec<A> codecA, MapCodec<B> codecB, MapCodec<C> codecC, MapCodec<D> codecD, Function5<A, B, C, D, T, R> function) {
+        return DFunctionImplementations.DFunction4.create(codecA, codecB, codecC, codecD, function);
     }
 }

@@ -10,59 +10,49 @@ import java.util.function.Function;
 import static com.williambl.dfunc.DataFunctions.id;
 
 public final class NumberDPredicates {
-    public static final DPredicateType<Double, ? extends Function<Boolean, ? extends DPredicate<Double>>> CONSTANT = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends Function<Boolean, ? extends DFunction<Double, Boolean>>> CONSTANT = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("constant"),
-            DPredicate.<Boolean, Double>create(
+            DFunction.<Boolean, Double, Boolean>create(
                     Codec.BOOL.fieldOf("value"),
-                    (value, n) -> value
-            )
-    );
+                    (value, n) -> value));
 
-    public static final DPredicateType<Double, ? extends Function<List<DPredicate<Double>>, ? extends DPredicate<Double>>> AND = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends Function<List<DFunction<Double, Boolean>>, ? extends DFunction<Double, Boolean>>> AND = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("and"),
-            DPredicate.<List<DPredicate<Double>>, Double>create(
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, n) -> predicates.stream().allMatch(p -> p.test(n))
-            )
-    );
+            DFunction.<List<DFunction<Double, Boolean>>, Double, Boolean>create(
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
+                    (predicates, n) -> predicates.stream().allMatch(p -> p.apply(n))));
 
-    public static final DPredicateType<Double, ? extends Function<List<DPredicate<Double>>, ? extends DPredicate<Double>>> OR = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends Function<List<DFunction<Double, Boolean>>, ? extends DFunction<Double, Boolean>>> OR = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("or"),
-            DPredicate.<List<DPredicate<Double>>, Double>create(
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, n) -> predicates.stream().anyMatch(p -> p.test(n))
-            )
-    );
+            DFunction.<List<DFunction<Double, Boolean>>, Double, Boolean>create(
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
+                    (predicates, n) -> predicates.stream().anyMatch(p -> p.apply(n))));
 
-    public static final DPredicateType<Double, ? extends Function<DPredicate<Double>, ? extends DPredicate<Double>>> NOT = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends Function<DFunction<Double, Boolean>, ? extends DFunction<Double, Boolean>>> NOT = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("not"),
-            DPredicate.<DPredicate<Double>, Double>create(
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, n) -> !predicate.test(n)
-            )
-    );
+            DFunction.<DFunction<Double, Boolean>, Double, Boolean>create(
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, n) -> !predicate.apply(n)));
 
-    public static final DPredicateType<Double, ? extends BiFunction<Comparison, Double, ? extends DPredicate<Double>>> COMPARISON = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends BiFunction<Comparison, Double, ? extends DFunction<Double, Boolean>>> COMPARISON = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("comparison"),
-            DPredicate.<Comparison, Double, Double>create(
+            DFunction.<Comparison, Double, Double, Boolean>create(
                     Comparison.CODEC.fieldOf("comparison"),
                     Codec.DOUBLE.fieldOf("other_value"),
                     (comparison, otherValue, n) -> comparison.compare(n, otherValue)));
 
-    public static final DPredicateType<Double, ? extends BiFunction<Double, DPredicate<Double>, ? extends DPredicate<Double>>> MODULO = Registry.register(
-            DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Double, Boolean, ? extends BiFunction<Double, DFunction<Double, Boolean>, ? extends DFunction<Double, Boolean>>> MODULO = Registry.register(
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
             id("modulo"),
-            DPredicate.<Double, DPredicate<Double>, Double>create(
+            DFunction.<Double, DFunction<Double, Boolean>, Double, Boolean>create(
                     Codec.DOUBLE.fieldOf("modulo"),
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (modulo, predicate, n) -> predicate.test(n % modulo)
-            )
-    );
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (modulo, predicate, n) -> predicate.apply(n % modulo)));
 
     static void init() {}
 }

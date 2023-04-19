@@ -22,149 +22,120 @@ import java.util.function.Supplier;
 import static com.williambl.dfunc.DataFunctions.id;
 
 public final class EntityDPredicates {
-    public static final DPredicateType<Entity, ? extends Function<Boolean, ? extends DPredicate<Entity>>> CONSTANT = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<Boolean, ? extends DFunction<Entity, Boolean>>> CONSTANT = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("constant"),
-            DPredicate.<Boolean, Entity>create(
+            DFunction.<Boolean, Entity, Boolean>create(
                     Codec.BOOL.fieldOf("value"),
-                    (value, e) -> value
-            )
-    );
+                    (value, e) -> value));
 
-    public static final DPredicateType<Entity, ? extends Function<List<DPredicate<Entity>>, ? extends DPredicate<Entity>>> AND = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> AND = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("and"),
-            DPredicate.<List<DPredicate<Entity>>, Entity>create(
-                    DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, e) -> predicates.stream().allMatch(p -> p.test(e))
-            )
-    );
+            DFunction.<List<DFunction<Entity, Boolean>>, Entity, Boolean>create(
+                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
+                    (predicates, e) -> predicates.stream().allMatch(p -> p.apply(e))));
 
-    public static final DPredicateType<Entity, ? extends Function<List<DPredicate<Entity>>, ? extends DPredicate<Entity>>> OR = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> OR = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("or"),
-            DPredicate.<List<DPredicate<Entity>>, Entity>create(
-                    DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, e) -> predicates.stream().anyMatch(p -> p.test(e))
-            )
-    );
+            DFunction.<List<DFunction<Entity, Boolean>>, Entity, Boolean>create(
+                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
+                    (predicates, e) -> predicates.stream().anyMatch(p -> p.apply(e))));
 
-    public static final DPredicateType<Entity, ? extends Function<DPredicate<Entity>, ? extends DPredicate<Entity>>> NOT = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Entity, Boolean>, ? extends DFunction<Entity, Boolean>>> NOT = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("not"),
-            DPredicate.<DPredicate<Entity>, Entity>create(
-                    DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> !predicate.test(e)
-            )
-    );
+            DFunction.<DFunction<Entity, Boolean>, Entity, Boolean>create(
+                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> !predicate.apply(e)));
 
-    public static final DPredicateType<Entity, ? extends Function<DPredicate<Level>, ? extends DPredicate<Entity>>> LEVEL_PREDICATE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Level, Boolean>, ? extends DFunction<Entity, Boolean>>> LEVEL_PREDICATE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("level_predicate"),
-            DPredicate.<DPredicate<Level>, Entity>create(
-                    DPredicate.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> predicate.test(e.level)
-            ));
+            DFunction.<DFunction<Level, Boolean>, Entity, Boolean>create(
+                    DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> predicate.apply(e.level)));
 
-    public static final DPredicateType<Entity, ? extends Function<EntityPredicate, ? extends DPredicate<Entity>>> ADVANCEMENT_PREDICATE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<EntityPredicate, ? extends DFunction<Entity, Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("advancement_predicate"),
-            DPredicate.<EntityPredicate, Entity>create(
+            DFunction.<EntityPredicate, Entity, Boolean>create(
                     DataFunctions.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
-                    (predicate, e) -> e.level instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e)
-            ));
+                    (predicate, e) -> e.level instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e)));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> DEAD_OR_DYING = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> DEAD_OR_DYING = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("dead_or_dying"),
-            DPredicate.create(
-                    e -> e instanceof LivingEntity l && l.isDeadOrDying()
-            ));
+            DFunction.create(
+                    e -> e instanceof LivingEntity l && l.isDeadOrDying()));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> ON_FIRE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> ON_FIRE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("on_fire"),
-            DPredicate.create(
-                    Entity::isOnFire
-            )
-    );
+            DFunction.create(Entity::isOnFire));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> SNEAKING = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> SNEAKING = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("sneaking"),
-            DPredicate.create(
-                    Entity::isShiftKeyDown
-            )
-    );
+            DFunction.create(Entity::isShiftKeyDown));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> SPRINTING = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> SPRINTING = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("sprinting"),
-            DPredicate.create(
-                    Entity::isSprinting
-            )
-    );
+            DFunction.create(Entity::isSprinting));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> SWIMMING = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> SWIMMING = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("swimming"),
-            DPredicate.create(
-                    Entity::isSwimming
-            )
-    );
+            DFunction.create(Entity::isSwimming));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> FALL_FLYING = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> FALL_FLYING = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("fall_flying"),
-            DPredicate.<Entity>create(
-                    e -> e instanceof LivingEntity l && l.isFallFlying()
-            )
-    );
+            DFunction.<Entity, Boolean>create(
+                    e -> e instanceof LivingEntity l && l.isFallFlying()));
 
-    public static final DPredicateType<Entity, ? extends Function<TagKey<Fluid>, ? extends DPredicate<Entity>>> SUBMERGED_IN = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<TagKey<Fluid>, ? extends DFunction<Entity, Boolean>>> SUBMERGED_IN = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("submerged_in"),
-            DPredicate.<TagKey<Fluid>, Entity>create(
+            DFunction.<TagKey<Fluid>, Entity, Boolean>create(
                     TagKey.codec(Registries.FLUID).fieldOf("fluid"),
-                    (f, e) -> e.isEyeInFluid(f)
-            )
-    );
+                    (f, e) -> e.isEyeInFluid(f)));
 
-    public static final DPredicateType<Entity, ? extends Function<DPredicate<Double>, ? extends DPredicate<Entity>>> AGE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Double, Boolean>, ? extends DFunction<Entity, Boolean>>> AGE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("age"),
-            DPredicate.<DPredicate<Double>, Entity>create(
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> predicate.test((double) e.tickCount)
-            ));
+            DFunction.<DFunction<Double, Boolean>, Entity, Boolean>create(
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> predicate.apply((double) e.tickCount)));
 
-    public static final DPredicateType<Entity, ? extends Function3<Attribute, DPredicate<Double>, Boolean, ? extends DPredicate<Entity>>> ATTRIBUTE_VALUE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function3<Attribute, DFunction<Double, Boolean>, Boolean, ? extends DFunction<Entity, Boolean>>> ATTRIBUTE_VALUE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("attribute_value"),
-            DPredicate.<Attribute, DPredicate<Double>, Boolean, Entity>create(
+            DFunction.<Attribute, DFunction<Double, Boolean>, Boolean, Entity, Boolean>create(
                     BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute"),
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
                     Codec.BOOL.optionalFieldOf("relative_to_base", false),
                     (attr, predicate, relative, e) -> e instanceof LivingEntity l
-                            && predicate.test(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))
-            ));
+                            && predicate.apply(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))));
 
-    public static final DPredicateType<Entity, ? extends Function<DPredicate<Double>, ? extends DPredicate<Entity>>> HEALTH = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Double, Boolean>, ? extends DFunction<Entity, Boolean>>> HEALTH = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("health"),
-            DPredicate.<DPredicate<Double>, Entity>create(
-                    DPredicate.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> e instanceof LivingEntity l && predicate.test((double) l.getHealth())));
+            DFunction.<DFunction<Double, Boolean>, Entity, Boolean>create(
+                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
+                    (predicate, e) -> e instanceof LivingEntity l && predicate.apply((double) l.getHealth())));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> CAN_SEE_SKY = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> CAN_SEE_SKY = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("can_see_sky"),
-            DPredicate.<Entity>create(e -> e.getLevel().canSeeSky(e.blockPosition())));
+            DFunction.<Entity, Boolean>create(e -> e.getLevel().canSeeSky(e.blockPosition())));
 
-    public static final DPredicateType<Entity, ? extends Supplier<? extends DPredicate<Entity>>> IS_SURVIVAL_LIKE = Registry.register(
-            DPredicate.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
+    public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> IS_SURVIVAL_LIKE = Registry.register(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("is_survival_like"),
-            DPredicate.<Entity>create(e -> !e.isSpectator() && !(e instanceof Player p && p.isCreative())));
+            DFunction.<Entity, Boolean>create(e -> !e.isSpectator() && !(e instanceof Player p && p.isCreative())));
 
     static void init() {}
 }
