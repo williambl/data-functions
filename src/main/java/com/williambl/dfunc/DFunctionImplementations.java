@@ -10,7 +10,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class DFunctionImplementations {
@@ -183,6 +182,36 @@ public final class DFunctionImplementations {
             AtomicReference<DFunctionType<T, R, Supplier<DFunction0<T, R>>>> typeRef = new AtomicReference<>();
             var predicate = new DFunction0<>(typeRef::get, function);
             typeRef.set(new DFunctionType<>(Codec.unit(predicate), () -> predicate));
+            return typeRef.get();
+        }
+    }
+
+    static final class ConstantDFunction<T, R> implements DFunction<T, R> {
+        private final Supplier<DFunctionType<T, R, ?>> typeSupplier;
+        private final R value;
+
+        public ConstantDFunction(Supplier<DFunctionType<T, R, ?>> typeSupplier, R value) {
+            this.typeSupplier = typeSupplier;
+            this.value = value;
+        }
+
+        @Override
+        public DFunctionType<T, R, ?> type() {
+            return this.typeSupplier.get();
+        }
+
+        @Override
+        public R apply(T t) {
+            return this.value;
+        }
+
+        public static <T, R> DFunctionType<T, R, Function<R, ConstantDFunction<T, R>>> create(Codec<R> constantCodec) {
+            AtomicReference<DFunctionType<T, R, Function<R, ConstantDFunction<T, R>>>> typeRef = new AtomicReference<>();
+            Function<R, ConstantDFunction<T, R>> factory = a -> new ConstantDFunction<>(typeRef::get, a);
+            var codec = RecordCodecBuilder.<ConstantDFunction<T, R>>create(instance -> instance.group(
+                    constantCodec.fieldOf("value").forGetter(p -> p.value)
+            ).apply(instance, factory));
+            typeRef.set(new DFunctionType<>(codec, factory));
             return typeRef.get();
         }
     }

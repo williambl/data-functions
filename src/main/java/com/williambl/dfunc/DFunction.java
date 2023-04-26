@@ -1,5 +1,6 @@
 package com.williambl.dfunc;
 
+import com.mojang.datafixers.types.Func;
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.datafixers.util.Function5;
@@ -40,6 +41,15 @@ public interface DFunction<T, R> extends Function<T, R> {
     DFunctionTypeRegistry<Double, Boolean> NUMBER_PREDICATE_TYPE_REGISTRY = createRegistry(id("number_predicate"), Codec.BOOL);
     DFunctionTypeRegistry<Level, Boolean> LEVEL_PREDICATE_TYPE_REGISTRY = createRegistry(id("level_predicate"), Codec.BOOL);
     DFunctionTypeRegistry<Entity, Double> ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY = createRegistry(id("entity_to_number_function"), Codec.DOUBLE);
+
+    /**
+     * Create a DFunction that produces a value given by its codec.
+     * @param constantCodec the value codec
+     * @return              a DFunction type
+     */
+    static <T, R> DFunctionType<T, R, ? extends Function<R, ? extends DFunction<T, R>>> create(Codec<R> constantCodec) {
+        return DFunctionImplementations.ConstantDFunction.create(constantCodec);
+    }
 
     /**
      * Create a new DPredicate with no parameters.

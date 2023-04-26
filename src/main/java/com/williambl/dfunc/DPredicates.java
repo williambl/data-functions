@@ -18,9 +18,7 @@ public final class DPredicates {
         return Registry.register(
                 functionType.registry(),
                 id("constant"),
-                DFunction.<Boolean, T, Boolean>create(
-                        Codec.BOOL.fieldOf("value"),
-                        (value, t) -> value));
+                DFunction.<T, Boolean>create(Codec.BOOL));
     }
 
     public static <T> DFunctionType<T, Boolean, ? extends Function<List<DFunction<T, Boolean>>, ? extends DFunction<T, Boolean>>> and(DFunctionTypeRegistry<T, Boolean> functionType) {

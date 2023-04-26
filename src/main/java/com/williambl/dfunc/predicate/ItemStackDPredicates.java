@@ -29,5 +29,5 @@ public final class ItemStackDPredicates {
                     ItemPredicate::matches)
             );
 
-    static void init() {}
+    public static void init() {}
 }

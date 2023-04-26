@@ -1,6 +1,8 @@
 package com.williambl.dfunc;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.williambl.dfunc.number.EntityNumberDFunctions;
 import com.williambl.dfunc.predicate.*;
 import net.fabricmc.api.ModInitializer;
@@ -32,6 +34,7 @@ public final class DataFunctions implements ModInitializer {
 		BlockInWorldDPredicates.init();
 		NumberDPredicates.init();
 		LevelDPredicates.init();
+		ItemStackDPredicates.init();
 		EntityNumberDFunctions.init();
 	}
 }

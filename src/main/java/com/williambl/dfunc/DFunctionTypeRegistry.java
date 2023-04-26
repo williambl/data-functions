@@ -26,7 +26,10 @@ public record DFunctionTypeRegistry<T, R>(Registry<DFunctionType<T, R, ?>> regis
         );
 
         Codec<DFunction<T, R>> codec = rCodec == null ? dispatchCodec : Codec.either(dispatchCodec, rCodec)
-                .xmap(e -> e.map(Function.identity(), r -> DFunction.<T, R>create($ -> r).factory().get()), Either::left);
+                .xmap(e -> e.map(Function.identity(), r -> DFunction.<T, R>create($ -> r).factory().get()),
+                        df -> df instanceof DFunctionImplementations.ConstantDFunction<T, R> constantDFunction
+                                ? Either.right(constantDFunction.apply(null))
+                                : Either.left(df));
 
         return new DFunctionTypeRegistry<>(registry, codec);
     }

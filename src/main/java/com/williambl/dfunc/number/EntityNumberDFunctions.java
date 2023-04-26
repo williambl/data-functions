@@ -18,9 +18,7 @@ public final class EntityNumberDFunctions {
     public static final DFunctionType<Entity, Double, ? extends Function<Double, ? extends DFunction<Entity, Double>>> CONSTANT = Registry.register(
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
             id("constant"),
-            DFunction.<Double, Entity, Double>create(
-                    Codec.DOUBLE.fieldOf("value"),
-                    (value, e) -> value));
+            DFunction.<Entity, Double>create(Codec.DOUBLE));
 
     public static final DFunctionType<Entity, Double, ? extends Supplier<? extends DFunction<Entity, Double>>> AGE = Registry.register(
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
@@ -30,7 +28,7 @@ public final class EntityNumberDFunctions {
     public static final DFunctionType<Entity, Double, ? extends Supplier<? extends DFunction<Entity, Double>>> HEALTH = Registry.register(
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
             id("health"),
-            DFunction.<Entity, Double>create(e -> e instanceof LivingEntity l ? l.getHealth() : 0.0));
+            DFunction.<Entity, Double>create(e -> e instanceof LivingEntity l ? (double) l.getHealth() : 0.0));
 
     public static final DFunctionType<Entity, Double, ? extends Function<Attribute, ? extends DFunction<Entity, Double>>> ATTRIBUTE = Registry.register(
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
