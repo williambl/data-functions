@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DPredicates;
 import com.williambl.dfunc.DataFunctions;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
@@ -19,46 +20,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.williambl.dfunc.DataFunctions.id;
 
 public final class EntityDPredicates {
-    public static final DFunctionType<Entity, Boolean, ? extends Function<Boolean, ? extends DFunction<Entity, Boolean>>> CONSTANT = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("constant"),
-            DFunction.<Boolean, Entity, Boolean>create(
-                    Codec.BOOL.fieldOf("value"),
-                    (value, e) -> value));
+    public static final DFunctionType<Entity, Boolean, ? extends Function<Boolean, ? extends DFunction<Entity, Boolean>>> CONSTANT = DPredicates.constant(DFunction.ENTITY_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> AND = DPredicates.and(DFunction.ENTITY_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> OR = DPredicates.or(DFunction.ENTITY_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Entity, Boolean>, ? extends DFunction<Entity, Boolean>>> NOT = DPredicates.not(DFunction.ENTITY_PREDICATE_TYPE_REGISTRY);
 
-    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> AND = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("and"),
-            DFunction.<List<DFunction<Entity, Boolean>>, Entity, Boolean>create(
-                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, e) -> predicates.stream().allMatch(p -> p.apply(e))));
+    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Level, Boolean>, ? extends DFunction<Entity, Boolean>>> LEVEL_PREDICATE = DPredicates.delegate(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY,
+            DFunction.LEVEL_PREDICATE_TYPE_REGISTRY,
+            Entity::getLevel);
 
-    public static final DFunctionType<Entity, Boolean, ? extends Function<List<DFunction<Entity, Boolean>>, ? extends DFunction<Entity, Boolean>>> OR = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("or"),
-            DFunction.<List<DFunction<Entity, Boolean>>, Entity, Boolean>create(
-                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, e) -> predicates.stream().anyMatch(p -> p.apply(e))));
-
-    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Entity, Boolean>, ? extends DFunction<Entity, Boolean>>> NOT = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("not"),
-            DFunction.<DFunction<Entity, Boolean>, Entity, Boolean>create(
-                    DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> !predicate.apply(e)));
-
-    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Level, Boolean>, ? extends DFunction<Entity, Boolean>>> LEVEL_PREDICATE = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("level_predicate"),
-            DFunction.<DFunction<Level, Boolean>, Entity, Boolean>create(
-                    DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> predicate.apply(e.level)));
+    public static final DFunctionType<Entity, Boolean, ? extends BiFunction<DFunction<Entity, Double>, DFunction<Double, Boolean>, ? extends DFunction<Entity, Boolean>>> NUMBER_PREDICATE = DPredicates.delegateWithDFunction(
+            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY,
+            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY,
+            DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY);
 
     public static final DFunctionType<Entity, Boolean, ? extends Function<EntityPredicate, ? extends DFunction<Entity, Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
             DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
@@ -106,13 +88,6 @@ public final class EntityDPredicates {
                     TagKey.codec(Registries.FLUID).fieldOf("fluid"),
                     (f, e) -> e.isEyeInFluid(f)));
 
-    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Double, Boolean>, ? extends DFunction<Entity, Boolean>>> AGE = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("age"),
-            DFunction.<DFunction<Double, Boolean>, Entity, Boolean>create(
-                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> predicate.apply((double) e.tickCount)));
-
     public static final DFunctionType<Entity, Boolean, ? extends Function3<Attribute, DFunction<Double, Boolean>, Boolean, ? extends DFunction<Entity, Boolean>>> ATTRIBUTE_VALUE = Registry.register(
             DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("attribute_value"),
@@ -122,13 +97,6 @@ public final class EntityDPredicates {
                     Codec.BOOL.optionalFieldOf("relative_to_base", false),
                     (attr, predicate, relative, e) -> e instanceof LivingEntity l
                             && predicate.apply(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))));
-
-    public static final DFunctionType<Entity, Boolean, ? extends Function<DFunction<Double, Boolean>, ? extends DFunction<Entity, Boolean>>> HEALTH = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("health"),
-            DFunction.<DFunction<Double, Boolean>, Entity, Boolean>create(
-                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, e) -> e instanceof LivingEntity l && predicate.apply((double) l.getHealth())));
 
     public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> CAN_SEE_SKY = Registry.register(
             DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),

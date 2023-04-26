@@ -3,6 +3,7 @@ package com.williambl.dfunc.predicate;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DPredicates;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.minecraft.core.Registry;
@@ -18,33 +19,10 @@ import java.util.function.Supplier;
 import static com.williambl.dfunc.DataFunctions.id;
 
 public final class LevelDPredicates {
-    public static final DFunctionType<Level, Boolean, ? extends Function<Boolean, ? extends DFunction<Level, Boolean>>> CONSTANT = Registry.register(
-            DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
-            id("constant"),
-            DFunction.<Boolean, Level, Boolean>create(
-                    Codec.BOOL.fieldOf("value"),
-                    (value, level) -> value));
-
-    public static final DFunctionType<Level, Boolean, ? extends Function<List<DFunction<Level, Boolean>>, ? extends DFunction<Level, Boolean>>> AND = Registry.register(
-            DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
-            id("and"),
-            DFunction.<List<DFunction<Level, Boolean>>, Level, Boolean>create(
-                    DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, level) -> predicates.stream().allMatch(p -> p.apply(level))));
-
-    public static final DFunctionType<Level, Boolean, ? extends Function<List<DFunction<Level, Boolean>>, ? extends DFunction<Level, Boolean>>> OR = Registry.register(
-            DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
-            id("or"),
-            DFunction.<List<DFunction<Level, Boolean>>, Level, Boolean>create(
-                    DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.codec().listOf().fieldOf("predicates"),
-                    (predicates, level) -> predicates.stream().anyMatch(p -> p.apply(level))));
-
-    public static final DFunctionType<Level, Boolean, ? extends Function<DFunction<Level, Boolean>, ? extends DFunction<Level, Boolean>>> NOT = Registry.register(
-            DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
-            id("not"),
-            DFunction.<DFunction<Level, Boolean>, Level, Boolean>create(
-                    DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (predicate, level) -> !predicate.apply(level)));
+    public static final DFunctionType<Level, Boolean, ? extends Function<Boolean, ? extends DFunction<Level, Boolean>>> CONSTANT = DPredicates.constant(DFunction.LEVEL_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Level, Boolean, ? extends Function<List<DFunction<Level, Boolean>>, ? extends DFunction<Level, Boolean>>> AND = DPredicates.and(DFunction.LEVEL_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Level, Boolean, ? extends Function<List<DFunction<Level, Boolean>>, ? extends DFunction<Level, Boolean>>> OR = DPredicates.or(DFunction.LEVEL_PREDICATE_TYPE_REGISTRY);
+    public static final DFunctionType<Level, Boolean, ? extends Function<DFunction<Level, Boolean>, ? extends DFunction<Level, Boolean>>> NOT = DPredicates.not(DFunction.LEVEL_PREDICATE_TYPE_REGISTRY);
 
     public static final DFunctionType<Level, Boolean, ? extends Function<String, ? extends DFunction<Level, Boolean>>> BOOLEAN_GAME_RULE = Registry.register(
             DFunction.LEVEL_PREDICATE_TYPE_REGISTRY.registry(),
@@ -71,7 +49,7 @@ public final class LevelDPredicates {
                             .findFirst()
                             .map(level.getGameRules()::getRule)
                             .map(v -> v instanceof GameRules.IntegerValue i ? (double) i.get() : v instanceof DoubleRule d ? d.get() : null)
-                            .map(predicate::apply)
+                            .map(predicate)
                             .orElse(false)));
 
     public static final DFunctionType<Level, Boolean, ? extends Supplier<? extends DFunction<Level, Boolean>>> IS_DAY = Registry.register(
