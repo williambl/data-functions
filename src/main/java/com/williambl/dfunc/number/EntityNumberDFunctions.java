@@ -1,5 +1,7 @@
 package com.williambl.dfunc.number;
 
+import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -19,6 +22,14 @@ public final class EntityNumberDFunctions {
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
             id("constant"),
             DFunction.<Entity, Double>create(Codec.DOUBLE));
+
+    public static final DFunctionType<Entity, Double, ? extends BiFunction<DFunction<Entity, Double>, DFunction<Double, Double>, ? extends DFunction<Entity, Double>>> TRANSFORMED = DFunction.transformed(
+            DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY,
+            DFunction.NUMBER_TO_NUMBER_FUNCTION_TYPE_REGISTRY);
+
+    public static final DFunctionType<Entity, Double, ? extends Function3<DFunction<Entity, Double>, DFunction<Entity, Double>, DFunction<Pair<Double, Double>, Double>, ? extends DFunction<Entity, Double>>> TRANSFORMED_WITH_ARGUMENT = DFunction.transformedWithArgument(
+            DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY,
+            DFunction.BI_NUMBER_TO_NUMBER_FUNCTION_TYPE_REGISTRY);
 
     public static final DFunctionType<Entity, Double, ? extends Supplier<? extends DFunction<Entity, Double>>> AGE = Registry.register(
             DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),

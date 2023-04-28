@@ -88,16 +88,6 @@ public final class EntityDPredicates {
                     TagKey.codec(Registries.FLUID).fieldOf("fluid"),
                     (f, e) -> e.isEyeInFluid(f)));
 
-    public static final DFunctionType<Entity, Boolean, ? extends Function3<Attribute, DFunction<Double, Boolean>, Boolean, ? extends DFunction<Entity, Boolean>>> ATTRIBUTE_VALUE = Registry.register(
-            DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
-            id("attribute_value"),
-            DFunction.<Attribute, DFunction<Double, Boolean>, Boolean, Entity, Boolean>create(
-                    BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute"),
-                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    Codec.BOOL.optionalFieldOf("relative_to_base", false),
-                    (attr, predicate, relative, e) -> e instanceof LivingEntity l
-                            && predicate.apply(relative ? l.getAttributeValue(attr) - l.getAttributeBaseValue(attr) : l.getAttributeValue(attr))));
-
     public static final DFunctionType<Entity, Boolean, ? extends Supplier<? extends DFunction<Entity, Boolean>>> CAN_SEE_SKY = Registry.register(
             DFunction.ENTITY_PREDICATE_TYPE_REGISTRY.registry(),
             id("can_see_sky"),

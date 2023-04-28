@@ -30,13 +30,8 @@ public final class NumberDPredicates {
                     Codec.DOUBLE.fieldOf("other_value"),
                     (comparison, otherValue, n) -> comparison.compare(n, otherValue)));
 
-    public static final DFunctionType<Double, Boolean, ? extends BiFunction<Double, DFunction<Double, Boolean>, ? extends DFunction<Double, Boolean>>> MODULO = Registry.register(
-            DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.registry(),
-            id("modulo"),
-            DFunction.<Double, DFunction<Double, Boolean>, Double, Boolean>create(
-                    Codec.DOUBLE.fieldOf("modulo"),
-                    DFunction.NUMBER_PREDICATE_TYPE_REGISTRY.codec().fieldOf("predicate"),
-                    (modulo, predicate, n) -> predicate.apply(n % modulo)));
+    public static DFunctionType<Double, Boolean, ? extends BiFunction<DFunction<Double, Double>, DFunction<Double, Boolean>, ? extends DFunction<Double, Boolean>>> TRANSFORMED =
+            DPredicates.transformed(DFunction.NUMBER_PREDICATE_TYPE_REGISTRY, DFunction.NUMBER_TO_NUMBER_FUNCTION_TYPE_REGISTRY);
 
     public static void init() {}
 }
