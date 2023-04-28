@@ -7,7 +7,9 @@ import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 
+import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
@@ -35,6 +37,26 @@ public class NumberNumberFunctions {
     public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> ABSOLUTE = fromUnaryOperator(id("absolute"), Math::abs);
     public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> NEGATE = fromUnaryOperator(id("negate"), a -> -a);
     public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> SQUARE_ROOT = fromUnaryOperator(id("square_root"), Math::sqrt);
+
+    // trigonometry
+    public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> SINE = fromUnaryOperator(id("sine"), Math::sin);
+    public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> COSINE = fromUnaryOperator(id("cosine"), Math::cos);
+    public static final DFunctionType<Double, Double, ? extends Supplier<? extends DFunction<Double, Double>>> TANGENT = fromUnaryOperator(id("tangent"), Math::tan);
+
+    // polynomial
+    public static final DFunctionType<Double, Double, ? extends Function<List<Double>, ? extends DFunction<Double, Double>>> POLYNOMIAL = Registry.register(
+            DFunction.NUMBER_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
+            id("polynomial"),
+            DFunction.create(
+                    Codec.DOUBLE.listOf().fieldOf("coefficients"),
+                    (coefficients, x) -> {
+                        double result = 0;
+                        for (int i = 0; i < coefficients.size(); i++) {
+                            result += coefficients.get(i) * Math.pow(x, i);
+                        }
+                        return result;
+                    }
+            ));
 
 
     public static DFunctionType<Double, Double, ? extends Function<Double, ? extends DFunction<Double, Double>>> fromBinaryOperator(ResourceLocation name, DoubleBinaryOperator operator) {

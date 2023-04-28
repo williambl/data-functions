@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.DataFunctions;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -47,6 +48,13 @@ public final class EntityNumberDFunctions {
             DFunction.<Attribute, Entity, Double>create(
                     BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute"),
                     (attribute, e) -> e instanceof LivingEntity l ? l.getAttributeValue(attribute) : 0.0));
+
+    public static final DFunctionType<Entity, Double, ? extends Function<Attribute, ? extends DFunction<Entity, Double>>> ATTRIBUTE_BASE = Registry.register(
+            DFunction.ENTITY_TO_NUMBER_FUNCTION_TYPE_REGISTRY.registry(),
+            DataFunctions.id("attribute_base"),
+            DFunction.<Attribute, Entity, Double>create(
+                    BuiltInRegistries.ATTRIBUTE.byNameCodec().fieldOf("attribute"),
+                    (attribute, e) -> e instanceof LivingEntity l ? l.getAttributeBaseValue(attribute) : 0.0));
 
     public static void init() {}
 }
