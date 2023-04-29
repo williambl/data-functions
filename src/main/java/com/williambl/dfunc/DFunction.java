@@ -147,7 +147,7 @@ public interface DFunction<T, R> extends Function<T, R> {
                 functionType.registry(),
                 outerFunctionType.registry().key().location(),
                 DFunction.<DFunction<T1, T2>, DFunction<T2, R>, T1, R>create(
-                        innerFunctionType.codec().fieldOf("function"),
+                        innerFunctionType.codec().fieldOf("argument"),
                         outerFunctionType.codec().fieldOf("transformer"),
                         (transformer, f2, t1) -> f2.apply(transformer.apply(t1))));
     }
@@ -157,7 +157,7 @@ public interface DFunction<T, R> extends Function<T, R> {
                 functionType.registry(),
                 id("transformed"),
                 DFunction.<DFunction<T, R>, DFunction<R, R>, T, R>create(
-                        functionType.codec().fieldOf("function"),
+                        functionType.codec().fieldOf("argument"),
                         transformerFunctionType.codec().fieldOf("transformer"),
                         (t2r, r2r, t) -> r2r.apply(t2r.apply(t))));
     }
@@ -167,8 +167,8 @@ public interface DFunction<T, R> extends Function<T, R> {
                 functionType.registry(),
                 id("transformed_with_argument"),
                 DFunction.<DFunction<T, R>, DFunction<T, R>, DFunction<Pair<R, R>, R>, T, R>create(
-                        functionType.codec().fieldOf("function_1"),
-                        functionType.codec().fieldOf("function_2"),
+                        functionType.codec().fieldOf("argument_1"),
+                        functionType.codec().fieldOf("argument_2"),
                         transformerFunctionType.codec().fieldOf("transformer"),
                         (t2rA, t2rB, r2r, t) -> r2r.apply(Pair.of(t2rA.apply(t), t2rB.apply(t)))));
     }
