@@ -37,6 +37,7 @@ public final class DataFunctions implements ModInitializer {
 		NumberDPredicates.init();
 		LevelDPredicates.init();
 		ItemStackDPredicates.init();
+		DamageDPredicates.init();
 		EntityNumberDFunctions.init();
 		NumberNumberFunctions.init();
 		BiNumberNumberDFunctions.init();

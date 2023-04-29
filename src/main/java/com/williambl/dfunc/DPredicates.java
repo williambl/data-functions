@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +49,13 @@ public final class DPredicates {
     }
 
     public static <T1, T2> DFunctionType<T1, Boolean, ? extends Function<DFunction<T2, Boolean>, ? extends DFunction<T1, Boolean>>> delegate(DFunctionTypeRegistry<T1, Boolean> functionType, DFunctionTypeRegistry<T2, Boolean> functionType2, Function<T1, T2> transformer) {
+        return delegate(functionType2.registry().key().location(), functionType, functionType2, transformer);
+    }
+
+    public static <T1, T2> DFunctionType<T1, Boolean, ? extends Function<DFunction<T2, Boolean>, ? extends DFunction<T1, Boolean>>> delegate(ResourceLocation name, DFunctionTypeRegistry<T1, Boolean> functionType, DFunctionTypeRegistry<T2, Boolean> functionType2, Function<T1, T2> transformer) {
         return Registry.register(
                 functionType.registry(),
-                functionType2.registry().key().location(),
+                name,
                 DFunction.<DFunction<T2, Boolean>, T1, Boolean>create(
                         functionType2.codec().fieldOf("predicate"),
                         (f2, t1) -> f2.apply(transformer.apply(t1))));
@@ -68,9 +72,13 @@ public final class DPredicates {
     }
 
     public static <T1, T2> DFunctionType<T1, Boolean, ? extends Function<DFunction<T2, Boolean>, ? extends DFunction<T1, Boolean>>> delegateOptional(DFunctionTypeRegistry<T1, Boolean> functionType, DFunctionTypeRegistry<T2, Boolean> functionType2, Function<T1, Optional<T2>> transformer) {
+        return delegateOptional(functionType2.registry().key().location(), functionType, functionType2, transformer);
+    }
+
+    public static <T1, T2> DFunctionType<T1, Boolean, ? extends Function<DFunction<T2, Boolean>, ? extends DFunction<T1, Boolean>>> delegateOptional(ResourceLocation name, DFunctionTypeRegistry<T1, Boolean> functionType, DFunctionTypeRegistry<T2, Boolean> functionType2, Function<T1, Optional<T2>> transformer) {
         return Registry.register(
                 functionType.registry(),
-                functionType2.registry().key().location(),
+                name,
                 DFunction.<DFunction<T2, Boolean>, T1, Boolean>create(
                         functionType2.codec().fieldOf("predicate"),
                         (f2, t1) -> transformer.apply(t1).filter(f2::apply).isPresent()));
