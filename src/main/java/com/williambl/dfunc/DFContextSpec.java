@@ -24,7 +24,7 @@ public final class DFContextSpec {
         Map<String, TypeToken<?>> reqs = new HashMap<>();
         for (ContextArg<?> ctxArg : ctxArgs) {
             if (ctxArg.renameOrFunction().flatMap(e -> e.right()).isEmpty()) {
-                reqs.put(ctxArg.renameOrFunction().flatMap(e -> e.left()).orElse(ctxArg.type().defaultName()), ctxArg.type().type());
+                reqs.put(ctxArg.renameOrFunction().flatMap(e -> e.left()).orElse(ctxArg.defaultName()), ctxArg.type());
             }
         }
         this.requirements = Map.copyOf(reqs);

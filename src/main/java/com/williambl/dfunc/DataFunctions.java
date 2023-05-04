@@ -1,14 +1,21 @@
 package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.williambl.dfunc.functions.DPredicates;
+import com.williambl.dfunc.functions.EntityDPredicates;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.Boat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public final class DataFunctions implements ModInitializer {
 	public static final String MODID = "dfunc";

@@ -15,18 +15,7 @@ public class DFContext {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> getArgumentsOfType() {
-        TypeToken<T> typeToken = new TypeToken<>() {};
-        List<Object> result = this.argumentsByType.get(typeToken);
-        if (result == null) {
-            throw new IllegalArgumentException("No argument of type " + typeToken + " exists");
-        }
-        return new ArrayList<T>((Collection<? extends T>) result);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getArgumentWithNameOrIndex(String name, int index) {
-        TypeToken<T> typeToken = new TypeToken<>() {};
+    public <T> T getArgumentWithNameOrIndex(String name, int index, TypeToken<T> typeToken) {
         Object resByName = this.argumentsByName.get(name);
         if (resByName != null && typeToken.isSupertypeOf(resByName.getClass())) {
             return (T) resByName;
@@ -53,7 +42,7 @@ public class DFContext {
 
         public <T> Builder addArgument(String name, T value) {
             this.argumentsByName.put(name, value);
-            this.argumentsByType.computeIfAbsent(new TypeToken<T>() {}, $ -> new ArrayList<>()).add(value);
+            this.argumentsByType.computeIfAbsent(TypeToken.of(value.getClass()), $ -> new ArrayList<>()).add(value);
             return this;
         }
 
