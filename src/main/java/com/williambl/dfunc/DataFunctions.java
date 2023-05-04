@@ -1,14 +1,7 @@
 package com.williambl.dfunc;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
-import com.williambl.dfunc.number.BiNumberNumberDFunctions;
-import com.williambl.dfunc.number.EntityNumberDFunctions;
-import com.williambl.dfunc.number.NumberNumberFunctions;
-import com.williambl.dfunc.predicate.*;
 import net.fabricmc.api.ModInitializer;
-
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -31,15 +24,5 @@ public final class DataFunctions implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		EntityDPredicates.init();
-		BiEntityDPredicates.init();
-		BlockInWorldDPredicates.init();
-		NumberDPredicates.init();
-		LevelDPredicates.init();
-		ItemStackDPredicates.init();
-		DamageDPredicates.init();
-		EntityNumberDFunctions.init();
-		NumberNumberFunctions.init();
-		BiNumberNumberDFunctions.init();
 	}
 }
