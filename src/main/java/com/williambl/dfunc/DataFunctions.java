@@ -31,5 +31,7 @@ public final class DataFunctions implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		DPredicates.init();
+		EntityDPredicates.init();
 	}
 }
