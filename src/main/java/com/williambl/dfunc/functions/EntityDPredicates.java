@@ -23,7 +23,7 @@ import static com.williambl.dfunc.DataFunctions.id;
 public class EntityDPredicates {
     public static final DFunctionType<Boolean, ? extends BiFunction<EntityPredicate, ContextArg<Entity>, ? extends DFunction<Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
             DFunction.PREDICATE.registry(),
-            id("advancement_predicate"),
+            id("entity_advancement_predicate"),
             DFunction.<EntityPredicate, ContextArg<Entity>, Boolean>create(
                     DataFunctions.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
                     ContextArg.ENTITY,

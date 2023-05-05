@@ -4,6 +4,9 @@ import com.google.common.reflect.TypeToken;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.*;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -73,4 +76,7 @@ public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Op
     }
 
     public static final Type<Entity> ENTITY = new Type<>("entity", 0, null, TypeToken.of(Entity.class));
+    public static final Type<BlockInWorld> BLOCK = new Type<>("block", 0, null, TypeToken.of(BlockInWorld.class));
+    public static final Type<ItemStack> ITEM = new Type<>("item", 0, null, TypeToken.of(ItemStack.class));
+    public static final Type<Level> LEVEL = new Type<>("level", 0, null, TypeToken.of(Level.class));
 }
