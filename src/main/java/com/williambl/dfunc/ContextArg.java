@@ -79,4 +79,6 @@ public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Op
     public static final Type<BlockInWorld> BLOCK = new Type<>("block", 0, null, TypeToken.of(BlockInWorld.class));
     public static final Type<ItemStack> ITEM = new Type<>("item", 0, null, TypeToken.of(ItemStack.class));
     public static final Type<Level> LEVEL = new Type<>("level", 0, null, TypeToken.of(Level.class));
+    public static final Type<Double> NUMBER_A = new Type<>("a", 0, null, TypeToken.of(Double.class));
+    public static final Type<Double> NUMBER_B = new Type<>("b", 1, null, TypeToken.of(Double.class));
 }

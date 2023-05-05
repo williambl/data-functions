@@ -2,10 +2,7 @@ package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.williambl.dfunc.functions.BlockInWorldDPredicates;
-import com.williambl.dfunc.functions.DPredicates;
-import com.williambl.dfunc.functions.EntityDPredicates;
-import com.williambl.dfunc.functions.ItemStackDPredicates;
+import com.williambl.dfunc.functions.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -37,5 +34,7 @@ public final class DataFunctions implements ModInitializer {
 		EntityDPredicates.init();
 		BlockInWorldDPredicates.init();
 		ItemStackDPredicates.init();
+		NumberDFunctions.init();
+		EntityNumberDFunctions.init();
 	}
 }
