@@ -1,6 +1,8 @@
 package com.williambl.dfunc.functions;
 
+import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.Comparison;
 import com.williambl.dfunc.ContextArg;
 import com.williambl.dfunc.DFunction;
 import com.williambl.dfunc.DFunctionType;
@@ -53,6 +55,16 @@ public class NumberDFunctions {
                         return result;
                     }
             ));
+
+    // predicate
+    public static DFunctionType<Boolean, ? extends Function3<ContextArg<Double>, ContextArg<Double>, Comparison, ? extends DFunction<Boolean>>> COMPARISON = Registry.register(
+            DFunction.PREDICATE.registry(),
+            id("comparison"),
+            DFunction.<ContextArg<Double>, ContextArg<Double>, Comparison, Boolean>create(
+                    ContextArg.NUMBER_A,
+                    ContextArg.NUMBER_B,
+                    Comparison.CODEC.fieldOf("comparison"),
+                    (a, b, comparison, ctx) -> comparison.compare(a.get(ctx), b.get(ctx))));
 
     public static DFunctionType<Double, ? extends BiFunction<ContextArg<Double>, ContextArg<Double>, ? extends DFunction<Double>>> fromBinaryOperator(ResourceLocation name, DoubleBinaryOperator operator) {
         return Registry.register(
