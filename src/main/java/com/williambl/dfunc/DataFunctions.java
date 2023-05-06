@@ -30,5 +30,7 @@ public final class DataFunctions implements ModInitializer {
 		BlockInWorldDFunctions.init();
 		ItemStackDFunctions.init();
 		NumberDFunctions.init();
+		LevelDFunctions.init();
+		DamageSourceDFunctions.init();
 	}
 }
