@@ -1,6 +1,8 @@
 package com.williambl.dfunc;
 
 import com.google.common.reflect.TypeToken;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -27,6 +29,45 @@ public class DFContext {
         }
 
         throw new IllegalArgumentException("No argument with name " + name + " or index " + index + " with type " + typeToken + " exists");
+    }
+
+    public static DFContext empty() {
+        return new DFContext(Collections.emptyMap(), Collections.emptyMap());
+    }
+
+    public static DFContext entity(Entity entity) {
+        return builder()
+                .addArgument("entity", entity)
+                .addArgument("level", entity.getLevel())
+                .build();
+    }
+
+    public static DFContext entityTarget(Entity entity, Entity target) {
+        return builder()
+                .addArgument("entity", entity)
+                .addArgument("level", entity.getLevel())
+                .addArgument("target", target)
+                .build();
+    }
+
+    public static DFContext entityDamage(Entity entity, DamageSource source, float amount) {
+        return builder()
+                .addArgument("entity", entity)
+                .addArgument("level", entity.getLevel())
+                .addArgument("damage_source", source)
+                .addArgument("damage_amount", (double) amount)
+                .build();
+    }
+
+    public static DFContext entityDamage(Entity entity, DamageSource source, float amount, Entity attacker, Entity directAttacker) {
+        return builder()
+                .addArgument("entity", entity)
+                .addArgument("level", entity.getLevel())
+                .addArgument("damage_source", source)
+                .addArgument("damage_amount", (double) amount)
+                .addArgument("attacker", attacker)
+                .addArgument("direct_attacker", directAttacker)
+                .build();
     }
 
     public static Builder builder() {
