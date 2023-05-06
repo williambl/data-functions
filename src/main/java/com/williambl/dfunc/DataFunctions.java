@@ -1,7 +1,6 @@
 package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.williambl.dfunc.functions.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.advancements.critereon.BlockPredicate;
@@ -9,12 +8,8 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.Boat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public final class DataFunctions implements ModInitializer {
 	public static final String MODID = "dfunc";
@@ -31,10 +26,9 @@ public final class DataFunctions implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		DPredicates.init();
-		EntityDPredicates.init();
-		BlockInWorldDPredicates.init();
-		ItemStackDPredicates.init();
+		EntityDFunctions.init();
+		BlockInWorldDFunctions.init();
+		ItemStackDFunctions.init();
 		NumberDFunctions.init();
-		EntityNumberDFunctions.init();
 	}
 }

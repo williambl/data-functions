@@ -4,9 +4,7 @@ import com.mojang.serialization.Codec;
 import com.williambl.dfunc.*;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
@@ -15,7 +13,7 @@ import java.util.function.Function;
 
 import static com.williambl.dfunc.DataFunctions.id;
 
-public class LevelDPredicates {
+public class LevelDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<String, ContextArg<Level>, ? extends DFunction<Boolean>>> BOOLEAN_GAME_RULE = Registry.register(
             DFunction.PREDICATE.registry(),
             id("boolean_game_rule"),
