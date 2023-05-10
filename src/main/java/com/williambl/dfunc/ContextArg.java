@@ -81,6 +81,6 @@ public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Op
     public static final Type<ItemStack> ITEM = new Type<>("item", 0, null, TypeToken.of(ItemStack.class));
     public static final Type<DamageSource> DAMAGE_SOURCE = new Type<>("damage_source", 0, null, TypeToken.of(DamageSource.class));
     public static final Type<Level> LEVEL = new Type<>("level", 0, null, TypeToken.of(Level.class));
-    public static final Type<Double> NUMBER_A = new Type<>("a", 0, null, TypeToken.of(Double.class));
-    public static final Type<Double> NUMBER_B = new Type<>("b", 1, null, TypeToken.of(Double.class));
+    public static final Type<Double> NUMBER_A = new Type<>("a", 0, DFunction.NUMBER_FUNCTION.codec(), TypeToken.of(Double.class));
+    public static final Type<Double> NUMBER_B = new Type<>("b", 1, DFunction.NUMBER_FUNCTION.codec(), TypeToken.of(Double.class));
 }
