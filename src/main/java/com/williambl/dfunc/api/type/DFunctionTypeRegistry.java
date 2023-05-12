@@ -2,7 +2,7 @@ package com.williambl.dfunc.api.type;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.williambl.dfunc.DFunctionImplementations;
+import com.williambl.dfunc.impl.DFunctionImplementations;
 import com.williambl.dfunc.api.DFunction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @param codec     the codec
  */
 public record DFunctionTypeRegistry<R>(Registry<DFunctionType<R, ?>> registry, Codec<DFunction<R>> codec) {
-    static <T, R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name, @Nullable Codec<R> rCodec) {
+    public static <T, R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name, @Nullable Codec<R> rCodec) {
         ResourceKey<Registry<DFunctionType<R, ?>>> key = ResourceKey.createRegistryKey(name);
         Registry<DFunctionType<R, ?>> registry = FabricRegistryBuilder.createSimple(key).buildAndRegister();
         Codec<DFunction<R>> dispatchCodec = registry.byNameCodec().dispatch(

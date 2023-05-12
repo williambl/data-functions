@@ -3,7 +3,7 @@ package com.williambl.dfunc.api;
 import com.mojang.datafixers.util.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.williambl.dfunc.DFunctionImplementations;
+import com.williambl.dfunc.impl.DFunctionImplementations;
 import com.williambl.dfunc.api.type.DFunctionType;
 import com.williambl.dfunc.api.type.DFunctionTypeRegistry;
 import com.williambl.dfunc.api.context.DFContext;
@@ -12,8 +12,7 @@ import com.williambl.dfunc.api.context.DFContextSpec;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
-import static com.williambl.dfunc.api.type.DFunctionTypeRegistry.createRegistry;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 /**
  * A data-defined predicate.

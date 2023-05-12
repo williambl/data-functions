@@ -1,4 +1,4 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.impl;
 
 import com.mojang.datafixers.util.*;
 import com.mojang.serialization.Codec;

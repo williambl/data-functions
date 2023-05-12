@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 import java.util.function.*;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 public class NumberDFunctions {
     public static final DFunctionType<Double, ? extends Function<Double, ? extends DFunction<Double>>> CONSTANT = Registry.register(

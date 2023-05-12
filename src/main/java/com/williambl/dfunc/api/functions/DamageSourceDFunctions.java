@@ -11,7 +11,7 @@ import net.minecraft.world.damagesource.DamageType;
 
 import java.util.function.BiFunction;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 public class DamageSourceDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<TagKey<DamageType>, ContextArg<DamageSource>, ? extends DFunction<Boolean>>> DAMAGE_TAG = Registry.register(

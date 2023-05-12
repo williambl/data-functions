@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "com.williambl.dfunc.DataFunctionsMod"
+			"com.williambl.dfunc.impl.DataFunctionsMod"
 		]
 	},
 	"mixins": [

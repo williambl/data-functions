@@ -8,7 +8,7 @@ import net.minecraft.core.Registry;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 public class DPredicates {
     public static final DFunctionType<Boolean, ? extends Function<Boolean, ? extends DFunction<Boolean>>> CONSTANT = Registry.register(

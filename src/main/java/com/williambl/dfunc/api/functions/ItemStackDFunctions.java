@@ -1,6 +1,6 @@
 package com.williambl.dfunc.api.functions;
 
-import com.williambl.dfunc.DataFunctionsMod;
+import com.williambl.dfunc.impl.DataFunctionsMod;
 import com.williambl.dfunc.api.context.ContextArg;
 import com.williambl.dfunc.api.DFunction;
 import com.williambl.dfunc.api.type.DFunctionType;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.function.BiFunction;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 public class ItemStackDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<ItemPredicate, ContextArg<ItemStack>, ? extends DFunction<Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(

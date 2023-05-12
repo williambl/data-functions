@@ -1,4 +1,4 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.impl;
 
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.api.functions.*;

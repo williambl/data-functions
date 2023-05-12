@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 public class LevelDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<String, ContextArg<Level>, ? extends DFunction<Boolean>>> BOOLEAN_GAME_RULE = Registry.register(
