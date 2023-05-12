@@ -1,4 +1,4 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.api;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;

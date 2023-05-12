@@ -1,7 +1,7 @@
 package com.williambl.dfunc;
 
 import com.mojang.serialization.Codec;
-import com.williambl.dfunc.functions.*;
+import com.williambl.dfunc.api.functions.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -11,7 +11,7 @@ import net.minecraft.util.ExtraCodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DataFunctions implements ModInitializer {
+public final class DataFunctionsMod implements ModInitializer {
 	public static final String MODID = "dfunc";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 

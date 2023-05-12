@@ -1,7 +1,9 @@
-package com.williambl.dfunc.functions;
+package com.williambl.dfunc.api.functions;
 
 import com.mojang.serialization.Codec;
-import com.williambl.dfunc.*;
+import com.williambl.dfunc.api.DFunction;
+import com.williambl.dfunc.api.context.ContextArg;
+import com.williambl.dfunc.api.type.DFunctionType;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.minecraft.core.Registry;
@@ -11,7 +13,7 @@ import net.minecraft.world.level.Level;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static com.williambl.dfunc.DataFunctions.id;
+import static com.williambl.dfunc.DataFunctionsMod.id;
 
 public class LevelDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<String, ContextArg<Level>, ? extends DFunction<Boolean>>> BOOLEAN_GAME_RULE = Registry.register(

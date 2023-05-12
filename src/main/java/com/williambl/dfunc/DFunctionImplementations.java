@@ -4,6 +4,11 @@ import com.mojang.datafixers.util.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.williambl.dfunc.api.DFunction;
+import com.williambl.dfunc.api.context.ContextArg;
+import com.williambl.dfunc.api.context.DFContext;
+import com.williambl.dfunc.api.context.DFContextSpec;
+import com.williambl.dfunc.api.type.DFunctionType;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;

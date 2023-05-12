@@ -1,7 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.api.type;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.DFunctionImplementations;
+import com.williambl.dfunc.api.DFunction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

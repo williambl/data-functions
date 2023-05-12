@@ -1,16 +1,14 @@
-package com.williambl.dfunc.functions;
+package com.williambl.dfunc.api.functions;
 
-import com.mojang.datafixers.types.Func;
 import com.mojang.serialization.Codec;
-import com.williambl.dfunc.DFunction;
-import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.api.DFunction;
+import com.williambl.dfunc.api.type.DFunctionType;
 import net.minecraft.core.Registry;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
-import static com.williambl.dfunc.DataFunctions.id;
+import static com.williambl.dfunc.DataFunctionsMod.id;
 
 public class DPredicates {
     public static final DFunctionType<Boolean, ? extends Function<Boolean, ? extends DFunction<Boolean>>> CONSTANT = Registry.register(

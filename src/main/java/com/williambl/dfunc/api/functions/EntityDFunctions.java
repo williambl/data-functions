@@ -1,9 +1,12 @@
-package com.williambl.dfunc.functions;
+package com.williambl.dfunc.api.functions;
 
-import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.*;
+import com.williambl.dfunc.api.DFunction;
+import com.williambl.dfunc.api.context.ContextArg;
+import com.williambl.dfunc.api.type.DFunctionType;
+import com.williambl.dfunc.api.type.DFunctionTypeRegistry;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,14 +26,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
-import static com.williambl.dfunc.DataFunctions.id;
+import static com.williambl.dfunc.DataFunctionsMod.id;
 
 public class EntityDFunctions {
     public static final DFunctionType<Boolean, ? extends BiFunction<EntityPredicate, ContextArg<Entity>, ? extends DFunction<Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
             DFunction.PREDICATE.registry(),
             id("entity_advancement_predicate"),
             DFunction.<EntityPredicate, ContextArg<Entity>, Boolean>create(
-                    DataFunctions.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
+                    DataFunctionsMod.ADVANCEMENT_ENTITY_PREDICATE_CODEC.fieldOf("predicate"),
                     ContextArg.ENTITY,
                     (predicate, e, ctx) -> e.get(ctx).getLevel() instanceof ServerLevel sLevel && predicate.matches(sLevel, null, e.get(ctx))));
 

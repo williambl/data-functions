@@ -1,6 +1,7 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.api.type;
 
 import com.mojang.serialization.Codec;
+import com.williambl.dfunc.api.DFunction;
 
 /**
  * A DFunctionType holds a Codec and a factory function for a DFunction. In this way it holds everything needed to

@@ -1,8 +1,9 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.api.context;
 
 import com.google.common.reflect.TypeToken;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.*;
+import com.williambl.dfunc.api.DFunction;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;

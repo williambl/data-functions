@@ -1,18 +1,19 @@
-package com.williambl.dfunc;
+package com.williambl.dfunc.api;
 
-import com.google.common.reflect.TypeToken;
 import com.mojang.datafixers.util.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.williambl.dfunc.DFunctionImplementations;
+import com.williambl.dfunc.api.type.DFunctionType;
+import com.williambl.dfunc.api.type.DFunctionTypeRegistry;
+import com.williambl.dfunc.api.context.DFContext;
+import com.williambl.dfunc.api.context.DFContextSpec;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import static com.williambl.dfunc.DataFunctions.id;
-import static com.williambl.dfunc.DFunctionTypeRegistry.createRegistry;
+import static com.williambl.dfunc.DataFunctionsMod.id;
+import static com.williambl.dfunc.api.type.DFunctionTypeRegistry.createRegistry;
 
 /**
  * A data-defined predicate.
@@ -30,8 +31,8 @@ public interface DFunction<R> extends Function<DFContext, R> {
 
     DFContextSpec getSpec();
 
-    DFunctionTypeRegistry<Boolean> PREDICATE = createRegistry(id("predicate"), Codec.BOOL);
-    DFunctionTypeRegistry<Double> NUMBER_FUNCTION = createRegistry(id("number_function"), Codec.DOUBLE);
+    DFunctionTypeRegistry<Boolean> PREDICATE = DFunctionTypeRegistry.createRegistry(id("predicate"), Codec.BOOL);
+    DFunctionTypeRegistry<Double> NUMBER_FUNCTION = DFunctionTypeRegistry.createRegistry(id("number_function"), Codec.DOUBLE);
 
     /**
      * Create a DFunction that produces a value given by its codec.

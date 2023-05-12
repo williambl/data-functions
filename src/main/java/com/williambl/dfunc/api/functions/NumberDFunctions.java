@@ -1,18 +1,18 @@
-package com.williambl.dfunc.functions;
+package com.williambl.dfunc.api.functions;
 
 import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
-import com.williambl.dfunc.Comparison;
-import com.williambl.dfunc.ContextArg;
-import com.williambl.dfunc.DFunction;
-import com.williambl.dfunc.DFunctionType;
+import com.williambl.dfunc.api.Comparison;
+import com.williambl.dfunc.api.context.ContextArg;
+import com.williambl.dfunc.api.DFunction;
+import com.williambl.dfunc.api.type.DFunctionType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.function.*;
 
-import static com.williambl.dfunc.DataFunctions.id;
+import static com.williambl.dfunc.DataFunctionsMod.id;
 
 public class NumberDFunctions {
     public static final DFunctionType<Double, ? extends Function<Double, ? extends DFunction<Double>>> CONSTANT = Registry.register(
