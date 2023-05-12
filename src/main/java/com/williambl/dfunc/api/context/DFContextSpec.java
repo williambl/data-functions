@@ -9,15 +9,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Represents variables 'required' to exist in a {@link DFContext} for a function to be executed.
+ */
 public final class DFContextSpec {
+    /**
+     * The empty DFContextSpec, which requires no variables.
+     */
     public static final DFContextSpec EMPTY = new DFContextSpec(Map.of());
 
     private final @Unmodifiable Map<String, TypeToken<?>> requirements;
 
+    /**
+     * Create a new DFContextSpec with the given requirements.
+     * @param requirements  the requirements
+     */
     public DFContextSpec(Map<String, TypeToken<?>> requirements) {
         this.requirements = Map.copyOf(requirements);
     }
 
+    /**
+     * Create a new DFContextSpec, with the requirements derived from the ContextArgs provided.
+     * @param ctxArgs   the ContextArgs
+     */
     public DFContextSpec(List<ContextArg<?>> ctxArgs) {
         Map<String, TypeToken<?>> reqs = new HashMap<>();
         for (ContextArg<?> ctxArg : ctxArgs) {
@@ -28,6 +42,12 @@ public final class DFContextSpec {
         this.requirements = Map.copyOf(reqs);
     }
 
+    /**
+     * Merge this DFContextSpec with another, returning a new DFContextSpec with the requirements of both.
+     * @param other the other DFContextSpec
+     * @return      the merged DFContextSpec
+     * @throws      IllegalArgumentException if the two DFContextSpecs have incompatible requirements (i.e. they both require a variable with the same name, but incompatible types)
+     */
     public DFContextSpec merge(DFContextSpec other) {
         Map<String, TypeToken<?>> reqs = new HashMap<>();
         // for each entry, if just one of this.requirements and other.requirements has it, put it in as-is.
@@ -53,6 +73,11 @@ public final class DFContextSpec {
         return new DFContextSpec(reqs);
     }
 
+    /**
+     * Check if this DFContextSpec satisfies another DFContextSpec.
+     * @param requiredSpec  the other DFContextSpec
+     * @return              whether this DFContextSpec satisfies the other DFContextSpec
+     */
     public boolean satisfies(DFContextSpec requiredSpec) {
         return this.requirements.entrySet().stream().allMatch(entry -> {
             TypeToken<?> otherType = requiredSpec.requirements.get(entry.getKey());

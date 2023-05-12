@@ -14,6 +14,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Represents an argument to a {@link DFunction} that is provided by the context.
+ * @param defaultName       the default name of the argument
+ * @param index             the index for the argument to check the context for
+ * @param type              the type of the argument
+ * @param renameOrFunction  either a different name for the argument to look up in the context, or a function to get the argument
+ */
 public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Optional<Either<String, DFunction<T>>> renameOrFunction) {
     public T get(DFContext ctx) {
         return this.renameOrFunction().map(e -> e.map(
@@ -22,6 +29,9 @@ public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Op
                 .orElseGet(() -> ctx.getArgumentWithNameOrIndex(this.defaultName(), this.index(), this.type()));
     }
 
+    /**
+     * A type of ContextArg. ContextArgs should be created using this class.
+     */
     public static final class Type<T> extends MapCodec<ContextArg<T>> {
         private final String defaultName;
         private final int index;
@@ -35,14 +45,28 @@ public record ContextArg<T>(String defaultName, int index, TypeToken<T> type, Op
             this.codec = createCodec(defaultName, index, dfunctionCodec, this.type);
         }
 
+        /**
+         * Create a ContextArg with the default name.
+         * @return  the ContextArg
+         */
         public ContextArg<T> arg() {
             return new ContextArg<>(this.defaultName, this.index, this.type, Optional.empty());
         }
 
+        /**
+         * Create a ContextArg with a different name to look up in the context.
+         * @param renamed   the name for the arg to look up in the context
+         * @return          the ContextArg
+         */
         public ContextArg<T> arg(String renamed) {
             return new ContextArg<>(this.defaultName, this.index, this.type, Optional.of(Either.left(renamed)));
         }
 
+        /**
+         * Create a ContextArg with a function to get the argument.
+         * @param function  the function to get the argument
+         * @return          the ContextArg
+         */
         public ContextArg<T> arg(DFunction<T> function) {
             return new ContextArg<>(this.defaultName, this.index, this.type, Optional.of(Either.right(function)));
         }

@@ -16,6 +16,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * <h2>ABANDON ALL HOPE YE WHO ENTER HERE</h2>
+ * <p>Sorry if the size of this file slows your IDE...</p>
+ * <p>Implementations of DFunction for argument counts from 0 to 15 (plus for constant values).</p>
+ * <p>Instead of using methods from this file directly, use the various DFunction#create methods.</p>
+ */
 public final class DFunctionImplementations {
     public static final class DFunction15<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R> implements DFunction<R> {
         private final Supplier<DFunctionType<R, ?>> typeSupplier;

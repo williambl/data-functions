@@ -13,12 +13,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 /**
- * Holds a registry and a codec for DPredicateTypes.
+ * Holds a registry and a codec for DFunctionTypes.
  * @param registry  the registry
  * @param codec     the codec
  */
 public record DFunctionTypeRegistry<R>(Registry<DFunctionType<R, ?>> registry, Codec<DFunction<R>> codec) {
-    public static <T, R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name, @Nullable Codec<R> rCodec) {
+    /**
+     * Creates a new DFunctionTypeRegistry. If a codec is provided, then constant functions will be encoded with it as
+     * just their value.
+     * @param name      the resource location name of the registry
+     * @param rCodec    the codec for the result type of the DFunctions, or null
+     * @return          the new DFunctionTypeRegistry
+     */
+    public static <R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name, @Nullable Codec<R> rCodec) {
         ResourceKey<Registry<DFunctionType<R, ?>>> key = ResourceKey.createRegistryKey(name);
         Registry<DFunctionType<R, ?>> registry = FabricRegistryBuilder.createSimple(key).buildAndRegister();
         Codec<DFunction<R>> dispatchCodec = registry.byNameCodec().dispatch(
@@ -35,7 +42,13 @@ public record DFunctionTypeRegistry<R>(Registry<DFunctionType<R, ?>> registry, C
         return new DFunctionTypeRegistry<>(registry, codec);
     }
 
-    static <T, R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name) {
+    /**
+     * Creates a new DFunctionTypeRegistry, with no codec for the result type.
+     * @param name  the resource location name of the registry
+     * @return      the new DFunctionTypeRegistry
+     * @see #createRegistry(ResourceLocation, Codec)
+     */
+    static <R> DFunctionTypeRegistry<R> createRegistry(ResourceLocation name) {
         return createRegistry(name, null);
     }
 }

@@ -15,19 +15,21 @@ import java.util.function.Function;
 import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
 /**
- * A data-defined predicate.
- * <p>
- * Create a new type of DPredicate using the many {@code create} methods in this class. If you need one with more than
- * four parameters, implement this interface yourself.
+ * A data-defined function.
+ * <p>Create a new type of DFunction using the many {@code create} methods in this class.</p>
  */
 public interface DFunction<R> extends Function<DFContext, R> {
     /**
-     * Get this DPredicate's type.
+     * Get this DFunction's type.
      *
-     * @return this DPredicate's type
+     * @return this DFunction's type
      */
     DFunctionType<R, ?> type();
 
+    /**
+     * Get this DFunction's context spec.
+     * @return this DFunction's context spec
+     */
     DFContextSpec getSpec();
 
     DFunctionTypeRegistry<Boolean> PREDICATE = DFunctionTypeRegistry.createRegistry(id("predicate"), Codec.BOOL);
@@ -88,5 +90,4 @@ public interface DFunction<R> extends Function<DFContext, R> {
     static <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R> DFunctionType<R, ? extends Function15<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, ? extends DFunction<R>>> create(MapCodec<T1> codec1, MapCodec<T2> codec2, MapCodec<T3> codec3, MapCodec<T4> codec4, MapCodec<T5> codec5, MapCodec<T6> codec6, MapCodec<T7> codec7, MapCodec<T8> codec8, MapCodec<T9> codec9, MapCodec<T10> codec10, MapCodec<T11> codec11, MapCodec<T12> codec12, MapCodec<T13> codec13, MapCodec<T14> codec14, MapCodec<T15> codec15, Function16<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, DFContext, R> function) {
         return DFunctionImplementations.DFunction15.create(codec1, codec2, codec3, codec4, codec5, codec6, codec7, codec8, codec9, codec10, codec11, codec12, codec13, codec14, codec15, function);
     }
-
 }
