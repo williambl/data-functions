@@ -2,12 +2,12 @@ package com.williambl.dfunc.api.context;
 
 import com.google.common.collect.Sets;
 import com.google.common.reflect.TypeToken;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents variables 'required' to exist in a {@link DFContext} for a function to be executed.
@@ -17,6 +17,9 @@ public final class DFContextSpec {
      * The empty DFContextSpec, which requires no variables.
      */
     public static final DFContextSpec EMPTY = new DFContextSpec(Map.of());
+    public static final DFContextSpec ENTITY = new DFContextSpec(Map.of("entity", TypeToken.of(Entity.class), "level", TypeToken.of(Level.class)));
+    public static final DFContextSpec ENTITY_TARGET = new DFContextSpec(Map.of("entity", TypeToken.of(Entity.class), "level", TypeToken.of(Level.class), "target", TypeToken.of(Entity.class)));
+    public static final DFContextSpec ENTITY_DAMAGE = new DFContextSpec(Map.of("entity", TypeToken.of(Entity.class), "level", TypeToken.of(Level.class), "damage_source", TypeToken.of(DamageSource.class), "damage_amount", TypeToken.of(Double.class), "attacker", new TypeToken<Optional<Entity>>() {}, "direct_attacker", new TypeToken<Optional<Entity>>() {}));
 
     private final @Unmodifiable Map<String, TypeToken<?>> requirements;
 
