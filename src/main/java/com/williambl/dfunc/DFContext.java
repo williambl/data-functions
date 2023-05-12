@@ -1,6 +1,7 @@
 package com.williambl.dfunc;
 
 import com.google.common.reflect.TypeToken;
+import net.minecraft.Util;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Unmodifiable;
@@ -31,6 +32,11 @@ public class DFContext {
         throw new IllegalArgumentException("No argument with name " + name + " or index " + index + " with type " + typeToken + " exists");
     }
 
+    public <T> DFContext with(String name, T value) {
+        return new DFContext(Util.make(new HashMap<>(this.argumentsByName), map -> map.put(name, value)),
+                Util.make(new HashMap<>(this.argumentsByType), map -> map.computeIfAbsent(TypeToken.of(value.getClass()), $ -> new ArrayList<>()).add(value)));
+    }
+
     public static DFContext empty() {
         return new DFContext(Collections.emptyMap(), Collections.emptyMap());
     }
@@ -56,17 +62,8 @@ public class DFContext {
                 .addArgument("level", entity.getLevel())
                 .addArgument("damage_source", source)
                 .addArgument("damage_amount", (double) amount)
-                .build();
-    }
-
-    public static DFContext entityDamage(Entity entity, DamageSource source, float amount, Entity attacker, Entity directAttacker) {
-        return builder()
-                .addArgument("entity", entity)
-                .addArgument("level", entity.getLevel())
-                .addArgument("damage_source", source)
-                .addArgument("damage_amount", (double) amount)
-                .addArgument("attacker", attacker)
-                .addArgument("direct_attacker", directAttacker)
+                .addArgument("attacker", Optional.ofNullable(source.getEntity()), new TypeToken<>() {})
+                .addArgument("direct_attacker", Optional.ofNullable(source.getDirectEntity()), new TypeToken<>() {})
                 .build();
     }
 
@@ -84,6 +81,12 @@ public class DFContext {
         public <T> Builder addArgument(String name, T value) {
             this.argumentsByName.put(name, value);
             this.argumentsByType.computeIfAbsent(TypeToken.of(value.getClass()), $ -> new ArrayList<>()).add(value);
+            return this;
+        }
+
+        public <T> Builder addArgument(String name, T value, TypeToken<T> typeToken) {
+            this.argumentsByName.put(name, value);
+            this.argumentsByType.computeIfAbsent(typeToken, $ -> new ArrayList<>()).add(value);
             return this;
         }
 

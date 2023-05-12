@@ -1,9 +1,9 @@
 package com.williambl.dfunc.functions;
 
-import com.williambl.dfunc.ContextArg;
-import com.williambl.dfunc.DFunction;
-import com.williambl.dfunc.DFunctionType;
-import com.williambl.dfunc.DataFunctions;
+import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Function4;
+import com.mojang.serialization.Codec;
+import com.williambl.dfunc.*;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -114,6 +114,9 @@ public class EntityDFunctions {
                     ContextArg.ENTITY,
                     (attr, e, ctx) -> e.get(ctx) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(attr)).map(AttributeInstance::getBaseValue).orElse(0.0) : 0.0));
 
+    public static final DFunctionType<Boolean, ? extends Function4<DFunction<Boolean>, String, DFunction<Boolean>, ContextArg<Optional<Entity>>, ? extends DFunction<Boolean>>> PREDICATE_WITH_UNWRAPPED_OPTIONAL = createWithUnwrappedOptional(DFunction.PREDICATE);
+    public static final DFunctionType<Double, ? extends Function4<DFunction<Double>, String, DFunction<Double>, ContextArg<Optional<Entity>>, ? extends DFunction<Double>>> NUMBER_FUNCTION_WITH_UNWRAPPED_OPTIONAL = createWithUnwrappedOptional(DFunction.NUMBER_FUNCTION);
+
     public static void init() {}
 
     public static DFunctionType<Double, ? extends Function<ContextArg<Entity>, ? extends DFunction<Double>>> createSimpleNumber(ResourceLocation name, ToDoubleFunction<Entity> operator) {
@@ -123,5 +126,19 @@ public class EntityDFunctions {
                 DFunction.<ContextArg<Entity>, Double>create(
                         ContextArg.ENTITY,
                         (e, ctx) -> operator.applyAsDouble(e.get(ctx))));
+    }
+
+    public static <R> DFunctionType<R, ? extends Function4<DFunction<R>, String, DFunction<R>, ContextArg<Optional<Entity>>, ? extends DFunction<R>>> createWithUnwrappedOptional(
+            DFunctionTypeRegistry<R> registry
+    ) {
+        return Registry.register(
+                registry.registry(),
+                id("with_unwrapped_optional"),
+                DFunction.<DFunction<R>, String, DFunction<R>, ContextArg<Optional<Entity>>, R>create(
+                        registry.codec().fieldOf("function"),
+                        Codec.STRING.optionalFieldOf("name", "entity"),
+                        registry.codec().fieldOf("fallback"),
+                        ContextArg.OPTIONAL_ENTITY,
+                        (pred, name, fallback, oe, ctx) -> oe.get(ctx).map(e -> pred.apply(ctx.with(name, e))).orElseGet(() -> fallback.apply(ctx))));
     }
 }
