@@ -82,9 +82,9 @@ public final class DFContextSpec {
      * @return              whether this DFContextSpec satisfies the other DFContextSpec
      */
     public boolean satisfies(DFContextSpec requiredSpec) {
-        return this.requirements.entrySet().stream().allMatch(entry -> {
-            TypeToken<?> otherType = requiredSpec.requirements.get(entry.getKey());
-            return otherType != null && otherType.isSupertypeOf(entry.getValue());
+        return requiredSpec.requirements.entrySet().stream().allMatch(entry -> {
+            TypeToken<?> otherType = this.requirements.get(entry.getKey());
+            return otherType != null && otherType.isSubtypeOf(entry.getValue());
         });
     }
 
