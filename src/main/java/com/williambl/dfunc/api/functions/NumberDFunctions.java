@@ -56,6 +56,16 @@ public class NumberDFunctions {
                     }
             ));
 
+    // if-else
+    public static DFunctionType<Double, ? extends Function3<ContextArg<Double>, ContextArg<Double>, DFunction<Boolean>, ? extends DFunction<Double>>> IF_ELSE = Registry.register(
+            DFunction.NUMBER_FUNCTION.registry(),
+            id("if_else"),
+            DFunction.<ContextArg<Double>, ContextArg<Double>, DFunction<Boolean>, Double>create(
+                    ContextArg.NUMBER_A,
+                    ContextArg.NUMBER_B,
+                    DFunction.PREDICATE.codec().fieldOf("predicate"),
+                    (a, b, predicate, ctx) -> predicate.apply(ctx) ? a.get(ctx) : b.get(ctx)));
+
     // predicate
     public static DFunctionType<Boolean, ? extends Function3<ContextArg<Double>, ContextArg<Double>, Comparison, ? extends DFunction<Boolean>>> COMPARISON = Registry.register(
             DFunction.PREDICATE.registry(),
