@@ -14,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -100,6 +101,14 @@ public class EntityDFunctions {
             DFunction.<ContextArg<Entity>, Boolean>create(
                     ContextArg.ENTITY,
                     (e, ctx) -> !e.get(ctx).isSpectator() && !(e.get(ctx) instanceof Player p && p.isCreative())));
+
+    public static final DFunctionType<Boolean, ? extends BiFunction<MobEffect, ContextArg<Entity>, ? extends DFunction<Boolean>>> HAS_EFFECT = Registry.register(
+            DFunction.PREDICATE.registry(),
+            id("has_effect"),
+            DFunction.<MobEffect, ContextArg<Entity>, Boolean>create(
+                    BuiltInRegistries.MOB_EFFECT.byNameCodec().fieldOf("effect"),
+                    ContextArg.ENTITY,
+                    (effect, e, ctx) -> e.get(ctx) instanceof LivingEntity l && l.hasEffect(effect)));
     public static final DFunctionType<Double, ? extends Function<ContextArg<Entity>, ? extends DFunction<Double>>> AGE = createSimpleNumber(id("age"), e -> e.tickCount);
     public static final DFunctionType<Double, ? extends Function<ContextArg<Entity>, ? extends DFunction<Double>>> HEALTH = createSimpleNumber(id("health"), e -> e instanceof LivingEntity l ? l.getHealth() : 0.0);
     public static final DFunctionType<Double, ? extends BiFunction<Attribute, ContextArg<Entity>, ? extends DFunction<Double>>> ATTRIBUTE = Registry.register(
