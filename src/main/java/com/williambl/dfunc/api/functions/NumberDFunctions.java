@@ -1,6 +1,8 @@
 package com.williambl.dfunc.api.functions;
 
 import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Function4;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.williambl.dfunc.api.Comparison;
 import com.williambl.dfunc.api.context.ContextArg;
@@ -10,7 +12,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 import static com.williambl.dfunc.impl.DataFunctionsMod.id;
 
@@ -65,6 +69,24 @@ public class NumberDFunctions {
                     ContextArg.NUMBER_B,
                     DFunction.PREDICATE.codec().fieldOf("predicate"),
                     (a, b, predicate, ctx) -> predicate.apply(ctx) ? a.get(ctx) : b.get(ctx)));
+
+    // match
+    public static DFunctionType<Double, ? extends BiFunction<Map<DFunction<Boolean>, ContextArg<Double>>, ContextArg<Double>, ? extends DFunction<Double>>> MATCH = Registry.register(
+            DFunction.NUMBER_FUNCTION.registry(),
+            id("match"),
+            DFunction.<Map<DFunction<Boolean>, ContextArg<Double>>, ContextArg<Double>, Double>create(
+                    Codec.mapPair(DFunction.PREDICATE.codec().fieldOf("if"), ContextArg.NUMBER_A.fieldOf("then")).codec().listOf().xmap(l -> l.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)), m -> m.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue())).collect(Collectors.toList())).fieldOf("cases"),
+                    ContextArg.NUMBER_B.fieldOf("default"),
+                    (map, defaultValue, ctx) -> {
+                        for (Map.Entry<DFunction<Boolean>, ContextArg<Double>> entry : map.entrySet()) {
+                            if (entry.getKey().apply(ctx)) {
+                                return entry.getValue().get(ctx);
+                            }
+                        }
+                        return defaultValue.get(ctx);
+                    }
+            ));
+
 
     // predicate
     public static DFunctionType<Boolean, ? extends Function3<ContextArg<Double>, ContextArg<Double>, Comparison, ? extends DFunction<Boolean>>> COMPARISON = Registry.register(
