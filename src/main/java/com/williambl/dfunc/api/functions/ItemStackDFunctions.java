@@ -1,47 +1,37 @@
 package com.williambl.dfunc.api.functions;
 
-import com.williambl.dfunc.impl.DataFunctionsMod;
-import com.williambl.dfunc.api.context.ContextArg;
-import com.williambl.dfunc.api.DFunction;
-import com.williambl.dfunc.api.type.DFunctionType;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import com.williambl.dfunc.api.DTypes;
+import com.williambl.vampilang.lang.VEnvironment;
+import com.williambl.vampilang.lang.VValue;
+import com.williambl.vampilang.lang.function.VFunctionDefinition;
+import com.williambl.vampilang.lang.function.VFunctionSignature;
+import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-import java.util.function.BiFunction;
-
-import static com.williambl.dfunc.impl.DataFunctionsMod.id;
+import java.util.Map;
 
 public class ItemStackDFunctions {
-    public static final DFunctionType<Boolean, ? extends BiFunction<ItemPredicate, ContextArg<ItemStack>, ? extends DFunction<Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("item_advancement_predicate"),
-            DFunction.<ItemPredicate, ContextArg<ItemStack>, Boolean>create(
-                    DataFunctionsMod.ADVANCEMENT_ITEM_PREDICATE_CODEC.fieldOf("predicate"),
-                    ContextArg.ITEM,
-                    (predicate, stack, ctx) -> predicate.matches(stack.get(ctx))));
+    public static final VFunctionDefinition ADVANCEMENT_PREDICATE = new VFunctionDefinition("item_advancement_predicate", new VFunctionSignature(Map.of(
+            "predicate", DTypes.ITEM_ADVANCEMENT_PREDICATE,
+            "item", DTypes.ITEM_STACK),
+            StandardVTypes.BOOLEAN),
+            (ctx, sig, arg) -> new VValue(sig.outputType(), arg.get("predicate").get(DTypes.ITEM_ADVANCEMENT_PREDICATE).matches(arg.get("item").get(DTypes.ITEM_STACK))));
 
-    public static final DFunctionType<Double, ? extends BiFunction<Enchantment, ContextArg<ItemStack>, ? extends DFunction<Double>>> ENCHANTMENT_LEVEL = Registry.register(
-            DFunction.NUMBER_FUNCTION.registry(),
-            id("enchantment_level"),
-            DFunction.<Enchantment, ContextArg<ItemStack>, Double>create(
-                    BuiltInRegistries.ENCHANTMENT.byNameCodec().fieldOf("enchantment"),
-                    ContextArg.ITEM,
-                    (enchantment, stack, ctx) -> (double) EnchantmentHelper.getItemEnchantmentLevel(enchantment, stack.get(ctx))));
+    public static final VFunctionDefinition ENCHANTMENT_LEVEL = new VFunctionDefinition("enchantment_level", new VFunctionSignature(Map.of(
+            "enchantment", DTypes.ENCHANTMENT,
+            "item", DTypes.ITEM_STACK),
+            StandardVTypes.NUMBER),
+            (ctx, sig, arg) -> new VValue(sig.outputType(), (double) EnchantmentHelper.getItemEnchantmentLevel(arg.get("enchantment").get(DTypes.ENCHANTMENT), arg.get("item").get(DTypes.ITEM_STACK))));
 
-    public static final DFunctionType<Boolean, ? extends BiFunction<TagKey<Item>, ContextArg<ItemStack>, ? extends DFunction<Boolean>>> ITEM_TAG = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("item_tag"),
-            DFunction.<TagKey<Item>, ContextArg<ItemStack>, Boolean>create(
-                    TagKey.codec(Registries.ITEM).fieldOf("tag"),
-                    ContextArg.ITEM,
-                    (tag, stack, ctx) -> stack.get(ctx).is(tag)));
+    public static final VFunctionDefinition TAG = new VFunctionDefinition("tag", new VFunctionSignature(Map.of(
+            "tag", DTypes.TAG,
+            "input", DTypes.TAGGABLE),
+            StandardVTypes.BOOLEAN),
+            (ctx, sig, args) -> new VValue(sig.outputType(), DTypes.tagFunctionForTaggable(args.get("input")).test(args.get("tag").getUnchecked())));
 
-    public static void init() {}
+    public static void register(VEnvironment env) {
+        env.registerFunction(ADVANCEMENT_PREDICATE);
+        env.registerFunction(ENCHANTMENT_LEVEL);
+        env.registerFunction(TAG);
+    }
 }

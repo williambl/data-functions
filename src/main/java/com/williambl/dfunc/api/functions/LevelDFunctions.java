@@ -1,62 +1,54 @@
 package com.williambl.dfunc.api.functions;
 
-import com.mojang.serialization.Codec;
-import com.williambl.dfunc.api.DFunction;
-import com.williambl.dfunc.api.context.ContextArg;
-import com.williambl.dfunc.api.type.DFunctionType;
+import com.williambl.dfunc.api.DTypes;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
+import com.williambl.vampilang.lang.VEnvironment;
+import com.williambl.vampilang.lang.VValue;
+import com.williambl.vampilang.lang.function.VFunctionDefinition;
+import com.williambl.vampilang.lang.function.VFunctionSignature;
+import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import static com.williambl.dfunc.impl.DataFunctionsMod.id;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class LevelDFunctions {
-    public static final DFunctionType<Boolean, ? extends BiFunction<String, ContextArg<Level>, ? extends DFunction<Boolean>>> BOOLEAN_GAME_RULE = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("boolean_game_rule"),
-            DFunction.<String, ContextArg<Level>, Boolean>create(
-                    Codec.STRING.fieldOf("rule"),
-                    ContextArg.LEVEL,
-                    (rule, level, ctx) -> GameRulesAccessor.getGameRuleTypes().keySet().stream()
-                            .filter(k -> k.getId().equals(rule))
-                            .findFirst()
-                            .map(level.get(ctx).getGameRules()::getRule)
-                            .filter(GameRules.BooleanValue.class::isInstance)
-                            .map(GameRules.BooleanValue.class::cast)
-                            .map(GameRules.BooleanValue::get)
-                            .orElse(false)));
+    public static final VFunctionDefinition BOOLEAN_GAME_RULE = new VFunctionDefinition("boolean_game_rule",
+            new VFunctionSignature(Map.of("rule", StandardVTypes.STRING, "level", DTypes.LEVEL), StandardVTypes.BOOLEAN),
+            (ctx, sig, args) -> new VValue(sig.outputType(), GameRulesAccessor.getGameRuleTypes().keySet().stream()
+                    .filter(k -> k.getId().equals(args.get("rule").get(StandardVTypes.STRING)))
+                    .findFirst()
+                    .map(args.get("level").get(DTypes.LEVEL).getGameRules()::getRule)
+                    .filter(GameRules.BooleanValue.class::isInstance)
+                    .map(GameRules.BooleanValue.class::cast)
+                    .map(GameRules.BooleanValue::get)
+                    .orElse(false)));
 
-    public static final DFunctionType<Double, ? extends BiFunction<String, ContextArg<Level>, ? extends DFunction<Double>>> NUMBER_GAME_RULE = Registry.register(
-            DFunction.NUMBER_FUNCTION.registry(),
-            id("number_game_rule"),
-            DFunction.<String, ContextArg<Level>, Double>create(
-                    Codec.STRING.fieldOf("rule"),
-                    ContextArg.LEVEL,
-                    (rule, level, ctx) -> GameRulesAccessor.getGameRuleTypes().keySet().stream()
-                            .filter(k -> k.getId().equals(rule))
-                            .findFirst()
-                            .map(level.get(ctx).getGameRules()::getRule)
-                            .map(v -> v instanceof GameRules.IntegerValue i ? (double) i.get() : v instanceof DoubleRule d ? d.get() : null)
-                            .orElse(0.0)));
+    public static final VFunctionDefinition NUMBER_GAME_RULE = new VFunctionDefinition("number_game_rule",
+            new VFunctionSignature(Map.of("rule", StandardVTypes.STRING, "level", DTypes.LEVEL), StandardVTypes.NUMBER),
+            (ctx, sig, args) -> new VValue(sig.outputType(), GameRulesAccessor.getGameRuleTypes().keySet().stream()
+                    .filter(k -> k.getId().equals(args.get("rule").get(StandardVTypes.STRING)))
+                    .findFirst()
+                    .map(args.get("level").get(DTypes.LEVEL).getGameRules()::getRule)
+                    .map(v -> v instanceof GameRules.IntegerValue i ? (double) i.get() : v instanceof DoubleRule d ? d.get() : null)
+                    .orElse(0.0)));
 
-    public static final DFunctionType<Boolean, ? extends Function<ContextArg<Level>, ? extends DFunction<Boolean>>> IS_DAY = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("is_day"),
-            DFunction.<ContextArg<Level>, Boolean>create(
-                    ContextArg.LEVEL,
-                    (level, ctx) -> level.get(ctx).isDay()));
+    public static final VFunctionDefinition IS_DAY = createFromPredicate("is_day", Level::isDay);
 
-    public static final DFunctionType<Boolean, ? extends Function<ContextArg<Level>, ? extends DFunction<Boolean>>> IS_RAINING = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("is_raining"),
-            DFunction.<ContextArg<Level>, Boolean>create(
-                    ContextArg.LEVEL,
-                    (level, ctx) -> level.get(ctx).isRaining()));
+    public static final VFunctionDefinition IS_RAINING = createFromPredicate("is_raining", Level::isRaining);
 
-    public static void init() {}
+    private static VFunctionDefinition createFromPredicate(String name, Predicate<Level> predicate) {
+        return new VFunctionDefinition(name,
+                new VFunctionSignature(Map.of("level", DTypes.LEVEL), StandardVTypes.BOOLEAN),
+                (ctx, sig, args) -> new VValue(sig.outputType(), predicate.test(args.get("level").get(DTypes.LEVEL))));
+    }
+
+    public static void register(VEnvironment env) {
+        env.registerFunction(BOOLEAN_GAME_RULE);
+        env.registerFunction(NUMBER_GAME_RULE);
+        env.registerFunction(IS_DAY);
+        env.registerFunction(IS_RAINING);
+    }
 }

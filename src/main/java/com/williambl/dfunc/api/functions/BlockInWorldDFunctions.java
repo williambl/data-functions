@@ -1,36 +1,38 @@
 package com.williambl.dfunc.api.functions;
 
-import com.williambl.dfunc.api.context.ContextArg;
-import com.williambl.dfunc.api.DFunction;
-import com.williambl.dfunc.api.type.DFunctionType;
-import com.williambl.dfunc.impl.DataFunctionsMod;
-import net.minecraft.advancements.critereon.BlockPredicate;
-import net.minecraft.core.Registry;
+import com.williambl.dfunc.api.DTypes;
+import com.williambl.vampilang.lang.VEnvironment;
+import com.williambl.vampilang.lang.VValue;
+import com.williambl.vampilang.lang.function.VFunctionDefinition;
+import com.williambl.vampilang.lang.function.VFunctionSignature;
+import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
-import java.util.function.BiFunction;
-
-import static com.williambl.dfunc.impl.DataFunctionsMod.id;
+import java.util.Map;
 
 public class BlockInWorldDFunctions {
-    public static final DFunctionType<Boolean, ? extends BiFunction<BlockPredicate, ContextArg<BlockInWorld>, ? extends DFunction<Boolean>>> ADVANCEMENT_PREDICATE = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("block_advancement_predicate"),
-            DFunction.<BlockPredicate, ContextArg<BlockInWorld>, Boolean>create(
-                    DataFunctionsMod.ADVANCEMENT_BLOCK_PREDICATE_CODEC.fieldOf("predicate"),
-                    ContextArg.BLOCK,
-                    (predicate, block, ctx) -> block.get(ctx).getLevel() instanceof ServerLevel sLevel && predicate.matches(sLevel, block.get(ctx).getPos())));
+    public static final VFunctionDefinition ADVANCEMENT_PREDICATE = new VFunctionDefinition("block_advancement_predicate", new VFunctionSignature(Map.of(
+            "predicate", DTypes.BLOCK_ADVANCEMENT_PREDICATE,
+            "block", DTypes.BLOCK_IN_WORLD),
+            StandardVTypes.BOOLEAN),
+            (ctx, sig, arg) -> {
+                var block = arg.get("block").get(DTypes.BLOCK_IN_WORLD);
+                return new VValue(sig.outputType(), block.getLevel() instanceof ServerLevel level && arg.get("predicate").get(DTypes.BLOCK_ADVANCEMENT_PREDICATE).matches(level, block.getPos()));
+            });
 
     // mojang why do you have THREE classes called BlockPredicate
-    public static final DFunctionType<Boolean, ? extends BiFunction<net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate, ContextArg<BlockInWorld>, ? extends DFunction<Boolean>>> BLOCK_PREDICATE = Registry.register(
-            DFunction.PREDICATE.registry(),
-            id("block_predicate"),
-            DFunction.<net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate, ContextArg<BlockInWorld>, Boolean>create(
-                    net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.CODEC.fieldOf("predicate"),
-                    ContextArg.BLOCK,
-                    (predicate, block, ctx) -> block.get(ctx).getLevel() instanceof WorldGenLevel level && predicate.test(level, block.get(ctx).getPos())));
+    public static final VFunctionDefinition WORLDGEN_PREDICATE = new VFunctionDefinition("block_worldgen_predicate", new VFunctionSignature(Map.of(
+            "predicate", DTypes.BLOCK_WORLDGEN_PREDICATE,
+            "block", DTypes.BLOCK_IN_WORLD),
+            StandardVTypes.BOOLEAN),
+            (ctx, sig, arg) -> {
+                var block = arg.get("block").get(DTypes.BLOCK_IN_WORLD);
+                return new VValue(sig.outputType(), block.getLevel() instanceof WorldGenLevel level && arg.get("predicate").get(DTypes.BLOCK_WORLDGEN_PREDICATE).test(level, block.getPos()));
+            });
 
-    public static void init() {}
+    public static void register(VEnvironment env) {
+        env.registerFunction(ADVANCEMENT_PREDICATE);
+        env.registerFunction(WORLDGEN_PREDICATE);
+    }
 }
