@@ -86,7 +86,7 @@ public class EntityDFunctions {
         env.registerFunction(ATTRIBUTE_BASE);
     }
 
-    private static VFunctionDefinition createFromPredicate(String name, Predicate<Entity> predicate) {
+    public static VFunctionDefinition createFromPredicate(String name, Predicate<Entity> predicate) {
         return new VFunctionDefinition(name,
                 new VFunctionSignature(Map.of("entity", DTypes.ENTITY), StandardVTypes.BOOLEAN),
                 (ctx, sig, args) -> new VValue(sig.outputType(), predicate.test(args.get("entity").get(DTypes.ENTITY))));
