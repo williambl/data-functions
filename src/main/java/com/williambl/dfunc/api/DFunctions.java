@@ -56,18 +56,7 @@ public class DFunctions {
         return expr.evaluate(ctx).getUnchecked();
     }
 
-    public static Function<VExpression, DataResult<VExpression>> vExpressionResolver(EvaluationContext.Spec spec) {
-        return x -> {
-            try {
-                return DataResult.success(x.resolveTypes(ENV, spec));
-            } catch (NullPointerException | IllegalStateException | IllegalArgumentException e) {
-                return DataResult.error(e::getLocalizedMessage);
-            }
-        };
-    }
-
     public static Codec<VExpression> resolvedExpressionCodec(VType outputType, EvaluationContext.Spec spec) {
-        var resolver = vExpressionResolver(spec);
-        return ENV.expressionCodecForType(outputType, spec).flatXmap(resolver, resolver);
+        return ENV.expressionCodecForType(outputType, spec);
     }
 }
