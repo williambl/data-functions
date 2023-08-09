@@ -1,9 +1,14 @@
 package com.williambl.dfunc.impl;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.williambl.dfunc.api.DFunctions;
 import com.williambl.dfunc.api.DTypes;
 import com.williambl.dfunc.api.functions.*;
+import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.type.VType;
 import com.williambl.vampilang.stdlib.ArithmeticVFunctions;
 import com.williambl.vampilang.stdlib.LogicVFunctions;
@@ -21,13 +26,15 @@ import net.minecraft.util.ExtraCodecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Function;
+
 public final class DataFunctionsMod implements ModInitializer {
 	public static final String MODID = "dfunc";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-	public static final Codec<EntityPredicate> ADVANCEMENT_ENTITY_PREDICATE_CODEC = ExtraCodecs.JSON.xmap(EntityPredicate::fromJson, EntityPredicate::serializeToJson);
-	public static final Codec<BlockPredicate> ADVANCEMENT_BLOCK_PREDICATE_CODEC = ExtraCodecs.JSON.xmap(BlockPredicate::fromJson, BlockPredicate::serializeToJson);
-	public static final Codec<ItemPredicate> ADVANCEMENT_ITEM_PREDICATE_CODEC = ExtraCodecs.JSON.xmap(ItemPredicate::fromJson, ItemPredicate::serializeToJson);
+	public static final Codec<EntityPredicate> ADVANCEMENT_ENTITY_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(EntityPredicate::fromJson), EntityPredicate::serializeToJson);
+	public static final Codec<BlockPredicate> ADVANCEMENT_BLOCK_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(BlockPredicate::fromJson), BlockPredicate::serializeToJson);
+	public static final Codec<ItemPredicate> ADVANCEMENT_ITEM_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(ItemPredicate::fromJson), ItemPredicate::serializeToJson);
 
 	public static final ResourceKey<Registry<VType>> TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(id("vtypes"));
 	public static final Registry<VType> TYPE_REGISTRY = FabricRegistryBuilder.createSimple(TYPE_REGISTRY_KEY).buildAndRegister();
@@ -47,5 +54,15 @@ public final class DataFunctionsMod implements ModInitializer {
 		BlockInWorldDFunctions.register(DFunctions.ENV);
 		ItemStackDFunctions.register(DFunctions.ENV);
 		LevelDFunctions.register(DFunctions.ENV);
+	}
+
+	private static <T> Function<JsonElement, DataResult<T>> maybeFailParseJson(Function<JsonElement, T> func) {
+		return j -> {
+			try {
+				return DataResult.success(func.apply(j));
+			} catch (JsonParseException e) {
+				return DataResult.error(e::getLocalizedMessage);
+			}
+		};
 	}
 }
