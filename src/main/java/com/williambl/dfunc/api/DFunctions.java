@@ -57,6 +57,7 @@ public class DFunctions {
     }
 
     public static Codec<VExpression> resolvedExpressionCodec(VType outputType, EvaluationContext.Spec spec) {
-        return ENV.expressionCodecForType(outputType, spec);
+        // types are already resolved in the decoding direction, we just need to do the same in the encoding direction
+        return ENV.expressionCodecForType(outputType, spec).flatComapMap(Function.identity(), v -> v.resolveTypes(ENV, spec));
     }
 }
