@@ -83,7 +83,7 @@ public class DataFunctionsEnvironment implements VEnvironment {
                                 Function.identity()),
                 VariableRefCodec.CODEC,
                 new ObjectConstructionCodec(this, spec).comapFlatMap(o -> type.contains(o.resolveTypes(this, spec).type()) ? DataResult.success(o) : DataResult.error(() -> "Unmatched type"), Function.identity()),
-                new ListConstructionCodec(this, spec)));
+                new ListConstructionCodec(this, spec, type)));
     }
 
     @Override
