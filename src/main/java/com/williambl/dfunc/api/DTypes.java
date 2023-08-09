@@ -73,7 +73,7 @@ public class DTypes {
             return Registries.FLUID;
         }
 
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Type %s is not taggable".formatted(taggableType));
     }
 
     public static void register(VEnvironment env) {
@@ -92,6 +92,6 @@ public class DTypes {
         env.registerType("block_worldgen_predicate", BLOCK_WORLDGEN_PREDICATE, net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.CODEC);
         env.registerType("tag", BARE_TAG);
         //noinspection unchecked
-        env.registerCodecForParameterisedType(BARE_TAG, type -> TagKey.codec((ResourceKey<? extends Registry<Object>>) registryKeyForTaggable(type)));
+        env.registerCodecForParameterisedType(BARE_TAG, type -> TagKey.codec((ResourceKey<? extends Registry<Object>>) registryKeyForTaggable(type.parameters.get(0))));
     }
 }
