@@ -11,6 +11,8 @@ import com.williambl.vampilang.lang.type.SimpleVType;
 import com.williambl.vampilang.lang.type.VParameterisedType;
 import com.williambl.vampilang.lang.type.VTemplateType;
 import com.williambl.vampilang.lang.type.VType;
+import com.williambl.vampilang.stdlib.StandardVFunctions;
+import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
@@ -80,7 +82,8 @@ public class DataFunctionsEnvironment implements VEnvironment {
                                         : DataResult.error(() -> "Unmatched type"),
                                 Function.identity()),
                 VariableRefCodec.CODEC,
-                new ObjectConstructionCodec(this, spec).comapFlatMap(o -> type.contains(o.resolveTypes(this, spec).type()) ? DataResult.success(o) : DataResult.error(() -> "Unmatched type"), Function.identity())));
+                new ObjectConstructionCodec(this, spec).comapFlatMap(o -> type.contains(o.resolveTypes(this, spec).type()) ? DataResult.success(o) : DataResult.error(() -> "Unmatched type"), Function.identity()),
+                new ListConstructionCodec(this, spec)));
     }
 
     @Override
@@ -118,6 +121,11 @@ public class DataFunctionsEnvironment implements VEnvironment {
     }
 
     @Override
+    public VParameterisedType listType() {
+        return StandardVTypes.LIST;
+    }
+
+    @Override
     public Map<String, VType> allTypes() {
         return DataFunctionsMod.TYPE_REGISTRY.entrySet().stream().collect(Collectors.toMap( //TODO cache on registry freeze
                 kv -> kv.getKey().location().toString(),
@@ -128,6 +136,11 @@ public class DataFunctionsEnvironment implements VEnvironment {
     public TypeNamer createTypeNamer() {
         Map<VType, String> reversedMap = DataFunctionsMod.TYPE_REGISTRY.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, kv -> kv.getKey().location().toString()));
         return new TypeNamer(reversedMap);
+    }
+
+    @Override
+    public void registerType(String name, VType type, Codec<?> codec) {
+        VEnvironment.super.registerType(name, type, codec);
     }
 
 
