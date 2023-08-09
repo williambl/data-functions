@@ -1,11 +1,15 @@
 package com.williambl.dfunc.api;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.williambl.dfunc.impl.DataFunctionsEnvironment;
 import com.williambl.vampilang.lang.EvaluationContext;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VExpression;
 import com.williambl.vampilang.lang.VValue;
+import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.type.TypedVType;
+import com.williambl.vampilang.lang.type.VType;
 import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public class DFunctions {
     public static final VEnvironment ENV = new DataFunctionsEnvironment();
@@ -39,7 +44,7 @@ public class DFunctions {
         return EvaluationContext.builder(BLOCK_IN_WORLD).addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, blockInWorld)).addVariable("level", new VValue(DTypes.LEVEL, blockInWorld.getLevel())).build();
     }
 
-    public static EvaluationContext createEntityInteractWithBlock(Entity entity, ItemStack item, BlockInWorld block) {
+    public static EvaluationContext createEntityInteractWithBlockContext(Entity entity, ItemStack item, BlockInWorld block) {
         return EvaluationContext.builder(ENTITY_INTERACT_WITH_BLOCK).addVariable("entity", new VValue(DTypes.ENTITY, entity)).addVariable("level", new VValue(DTypes.LEVEL, entity.level())).addVariable("item", new VValue(DTypes.ITEM_STACK, item)).addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, block)).build();
     }
 
@@ -49,5 +54,20 @@ public class DFunctions {
 
     public static <T> T evaluate(VExpression expr, EvaluationContext ctx) {
         return expr.evaluate(ctx).getUnchecked();
+    }
+
+    public static Function<VExpression, DataResult<VExpression>> vExpressionResolver(EvaluationContext.Spec spec) {
+        return x -> {
+            try {
+                return DataResult.success(x.resolveTypes(ENV, spec));
+            } catch (NullPointerException | IllegalStateException | IllegalArgumentException e) {
+                return DataResult.error(e::getLocalizedMessage);
+            }
+        };
+    }
+
+    public static Codec<VExpression> resolvedExpressionCodec(VType outputType, EvaluationContext.Spec spec) {
+        var resolver = vExpressionResolver(spec);
+        return ENV.expressionCodecForType(outputType, spec).flatXmap(resolver, resolver);
     }
 }
