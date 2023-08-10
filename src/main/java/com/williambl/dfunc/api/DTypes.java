@@ -5,6 +5,7 @@ import com.williambl.dfunc.impl.DataFunctionsMod;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VValue;
 import com.williambl.vampilang.lang.type.*;
+import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -25,12 +26,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.material.Fluid;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.function.Predicate;
 
 public class DTypes {
     public static final TypedVType<Level> LEVEL = VType.create(TypeToken.of(Level.class));
     public static final TypedVType<Entity> ENTITY = VType.create(TypeToken.of(Entity.class));
+    public static final VType OPTIONAL_ENTITY = StandardVTypes.OPTIONAL.with(0, ENTITY); // don't register this, as it's just a parameterisation of another type
     public static final TypedVType<DamageSource> DAMAGE_SOURCE = VType.create(TypeToken.of(DamageSource.class));
     public static final TypedVType<ItemStack> ITEM_STACK = VType.create(TypeToken.of(ItemStack.class));
     public static final TypedVType<Fluid> FLUID = VType.create(TypeToken.of(Fluid.class));

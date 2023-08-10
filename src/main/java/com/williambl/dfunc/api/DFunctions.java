@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class DFunctions {
@@ -24,7 +25,8 @@ public class DFunctions {
     public static final EvaluationContext.Spec EMPTY = new EvaluationContext.Spec();
     public static final EvaluationContext.Spec ENTITY = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL));
     public static final EvaluationContext.Spec ENTITY_TARGET = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "target", DTypes.ENTITY));
-    public static final EvaluationContext.Spec ENTITY_DAMAGE = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "damage_source", DTypes.DAMAGE_SOURCE, "damage_amount", StandardVTypes.NUMBER)); //TODO optionals !
+    public static final EvaluationContext.Spec ENTITY_DAMAGE = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "damage_source", DTypes.DAMAGE_SOURCE, "damage_amount", StandardVTypes.NUMBER, "attacker", DTypes.OPTIONAL_ENTITY, "direct_attacker", DTypes.OPTIONAL_ENTITY));
+    public static final EvaluationContext.Spec ENTITY_DAMAGE_WITH_WEAPON = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "damage_source", DTypes.DAMAGE_SOURCE, "damage_amount", StandardVTypes.NUMBER, "attacker", DTypes.OPTIONAL_ENTITY, "direct_attacker", DTypes.OPTIONAL_ENTITY, "weapon", DTypes.ITEM_STACK));
     public static final EvaluationContext.Spec BLOCK_IN_WORLD = new EvaluationContext.Spec(Map.of("block", DTypes.BLOCK_IN_WORLD, "level", DTypes.LEVEL));
     public static final EvaluationContext.Spec ENTITY_INTERACT_WITH_BLOCK = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "item", DTypes.ITEM_STACK, "block", DTypes.BLOCK_IN_WORLD));
 
@@ -37,7 +39,26 @@ public class DFunctions {
     }
 
     public static EvaluationContext createEntityDamageContext(Entity entity, DamageSource damage, float amount) {
-        return EvaluationContext.builder(ENTITY_DAMAGE).addVariable("entity", new VValue(DTypes.ENTITY, entity)).addVariable("level", new VValue(DTypes.LEVEL, entity.level())).addVariable("damage_source", new VValue(DTypes.DAMAGE_SOURCE, damage)).addVariable("damage_amount", new VValue(StandardVTypes.NUMBER, (double) amount)).build();
+        return EvaluationContext.builder(ENTITY_DAMAGE)
+                .addVariable("entity", new VValue(DTypes.ENTITY, entity))
+                .addVariable("level", new VValue(DTypes.LEVEL, entity.level()))
+                .addVariable("damage_source", new VValue(DTypes.DAMAGE_SOURCE, damage))
+                .addVariable("damage_amount", new VValue(StandardVTypes.NUMBER, (double) amount))
+                .addVariable("attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(damage.getEntity())))
+                .addVariable("direct_attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(damage.getDirectEntity())))
+                .build();
+    }
+
+    public static EvaluationContext entityDamageWithWeapon(Entity entity, DamageSource source, float amount, ItemStack weapon) {
+        return EvaluationContext.builder(ENTITY_DAMAGE_WITH_WEAPON)
+                .addVariable("entity", new VValue(DTypes.ENTITY, entity))
+                .addVariable("level", new VValue(DTypes.LEVEL, entity.level()))
+                .addVariable("damage_source", new VValue(DTypes.DAMAGE_SOURCE, source))
+                .addVariable("damage_amount", new VValue(StandardVTypes.NUMBER, (double) amount))
+                .addVariable("attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(source.getEntity())))
+                .addVariable("direct_attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(source.getDirectEntity())))
+                .addVariable("weapon", new VValue(DTypes.ITEM_STACK, weapon))
+                .build();
     }
 
     public static EvaluationContext createBlockInWorldContext(BlockInWorld blockInWorld) {
