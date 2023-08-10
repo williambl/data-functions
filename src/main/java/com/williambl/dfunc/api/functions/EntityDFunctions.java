@@ -45,7 +45,7 @@ public class EntityDFunctions {
             StandardVTypes.BOOLEAN),
             (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY).isEyeInFluid(args.get("fluid").getUnchecked())));
 
-    public static final VFunctionDefinition CAN_SEE_SKY = createFromPredicate("can_see_sky", e -> e.level().canSeeSky(e.getOnPos()));
+    public static final VFunctionDefinition CAN_SEE_SKY = createFromPredicate("can_see_sky", e -> e.level().canSeeSky(e.blockPosition()));
 
     public static final VFunctionDefinition IS_SURVIVAL_LIKE = createFromPredicate("is_survival_like", e -> !e.isSpectator() && !(e instanceof Player p && p.isCreative()));
 
