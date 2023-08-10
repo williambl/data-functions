@@ -122,7 +122,8 @@ public class DataFunctionsEnvironment implements VEnvironment {
                                         .map(DataResult::success)
                                         .orElse(DataResult.error(() -> "Unmatched type!")),
                         Function.identity()),
-                ListConstructionDecoder.createCodec(this, spec, type)));
+                ListConstructionDecoder.createCodec(this, spec, type),
+                LambdaDecoder.createCodec(this, spec, type)));
     }
 
     @Override
