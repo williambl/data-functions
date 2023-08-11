@@ -68,6 +68,11 @@ public class EntityDFunctions {
             StandardVTypes.NUMBER),
             (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(args.get("attribute").get(DTypes.ATTRIBUTE))).map(AttributeInstance::getBaseValue).orElse(0.0) : 0.0));
 
+    public static final VFunctionDefinition POSITION = new VFunctionDefinition("position", new VFunctionSignature(Map.of(
+            "entity", DTypes.ENTITY),
+            DTypes.VEC3),
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY).position()));
+
     public static void register(VEnvironment env) {
         env.registerFunction(ADVANCEMENT_PREDICATE);
         env.registerFunction(DEAD_OR_DYING);
@@ -84,6 +89,7 @@ public class EntityDFunctions {
         env.registerFunction(HEALTH);
         env.registerFunction(ATTRIBUTE);
         env.registerFunction(ATTRIBUTE_BASE);
+        env.registerFunction(POSITION);
     }
 
     public static VFunctionDefinition createFromPredicate(String name, Predicate<Entity> predicate) {

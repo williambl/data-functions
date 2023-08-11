@@ -9,10 +9,17 @@ import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -26,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec3;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.function.Predicate;
@@ -44,6 +52,10 @@ public class DTypes {
     public static final TypedVType<ItemPredicate> ITEM_ADVANCEMENT_PREDICATE = VType.create(TypeToken.of(ItemPredicate.class));
     public static final TypedVType<BlockPredicate> BLOCK_ADVANCEMENT_PREDICATE = VType.create(TypeToken.of(BlockPredicate.class));
     public static final TypedVType<EntityPredicate> ENTITY_ADVANCEMENT_PREDICATE = VType.create(TypeToken.of(EntityPredicate.class));
+    public static final TypedVType<Vec3> VEC3 = VType.create(TypeToken.of(Vec3.class));
+    public static final TypedVType<SoundEvent> SOUND_EVENT = VType.create(TypeToken.of(SoundEvent.class));
+    public static final TypedVType<ParticleOptions> PARTICLE = VType.create(TypeToken.of(ParticleOptions.class));
+    public static final TypedVType<ResourceLocation> RESOURCE_LOCATION = VType.create(TypeToken.of(ResourceLocation.class));
     public static final TypedVType<net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate> BLOCK_WORLDGEN_PREDICATE = VType.create(TypeToken.of(net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.class));
     public static final VTemplateType TAGGABLE = VType.createTemplate(ENTITY, DAMAGE_SOURCE, ITEM_STACK, BLOCK_IN_WORLD, FLUID);
     private static final SimpleVType BARE_TAG = VType.create();
@@ -93,6 +105,10 @@ public class DTypes {
         env.registerType("block_advancement_predicate", BLOCK_ADVANCEMENT_PREDICATE, DataFunctionsMod.ADVANCEMENT_BLOCK_PREDICATE_CODEC);
         env.registerType("entity_advancement_predicate", ENTITY_ADVANCEMENT_PREDICATE, DataFunctionsMod.ADVANCEMENT_ENTITY_PREDICATE_CODEC);
         env.registerType("block_worldgen_predicate", BLOCK_WORLDGEN_PREDICATE, net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.CODEC);
+        env.registerType("vec3", VEC3, Vec3.CODEC);
+        env.registerType("sound_event", SOUND_EVENT, BuiltInRegistries.SOUND_EVENT.byNameCodec());
+        env.registerType("particle", PARTICLE, ParticleTypes.CODEC);
+        env.registerType("resource_location", RESOURCE_LOCATION, ResourceLocation.CODEC);
         env.registerType("tag", BARE_TAG);
         //noinspection unchecked
         env.registerCodecForParameterisedType(BARE_TAG, type -> TagKey.codec((ResourceKey<? extends Registry<Object>>) registryKeyForTaggable(type.parameters.get(0))));
