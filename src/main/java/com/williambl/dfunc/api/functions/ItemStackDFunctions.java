@@ -29,6 +29,11 @@ public class ItemStackDFunctions {
             StandardVTypes.BOOLEAN),
             (ctx, sig, args) -> new VValue(sig.outputType(), DTypes.tagFunctionForTaggable(args.get("input")).test(args.get("tag").getUnchecked())));
 
+    public static final VFunctionDefinition ITEM_IS_EMPTY = new VFunctionDefinition("item_is_empty", new VFunctionSignature(Map.of(
+            "item", DTypes.ITEM_STACK),
+            StandardVTypes.BOOLEAN),
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("item").get(DTypes.ITEM_STACK).isEmpty()));
+
     public static void register(VEnvironment env) {
         env.registerFunction(ADVANCEMENT_PREDICATE);
         env.registerFunction(ENCHANTMENT_LEVEL);

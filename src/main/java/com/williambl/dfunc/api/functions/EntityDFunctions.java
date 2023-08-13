@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 import java.util.Optional;
@@ -73,6 +74,16 @@ public class EntityDFunctions {
             DTypes.VEC3),
             (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY).position()));
 
+    public static final VFunctionDefinition MAIN_HAND_ITEM = new VFunctionDefinition("main_hand_item", new VFunctionSignature(Map.of(
+            "entity", DTypes.ENTITY),
+            DTypes.ITEM_STACK),
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? l.getMainHandItem() : ItemStack.EMPTY));
+
+    public static final VFunctionDefinition OFF_HAND_ITEM = new VFunctionDefinition("off_hand_item", new VFunctionSignature(Map.of(
+            "entity", DTypes.ENTITY),
+            DTypes.ITEM_STACK),
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? l.getOffhandItem() : ItemStack.EMPTY));
+
     public static void register(VEnvironment env) {
         env.registerFunction(ADVANCEMENT_PREDICATE);
         env.registerFunction(DEAD_OR_DYING);
@@ -90,6 +101,8 @@ public class EntityDFunctions {
         env.registerFunction(ATTRIBUTE);
         env.registerFunction(ATTRIBUTE_BASE);
         env.registerFunction(POSITION);
+        env.registerFunction(MAIN_HAND_ITEM);
+        env.registerFunction(OFF_HAND_ITEM);
     }
 
     public static VFunctionDefinition createFromPredicate(String name, Predicate<Entity> predicate) {
