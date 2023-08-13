@@ -38,5 +38,6 @@ public class ItemStackDFunctions {
         env.registerFunction(ADVANCEMENT_PREDICATE);
         env.registerFunction(ENCHANTMENT_LEVEL);
         env.registerFunction(TAG);
+        env.registerFunction(ITEM_IS_EMPTY);
     }
 }
