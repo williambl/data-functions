@@ -1,13 +1,11 @@
 package com.williambl.dfunc.api;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.williambl.dfunc.impl.DataFunctionsEnvironment;
 import com.williambl.vampilang.lang.EvaluationContext;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VExpression;
 import com.williambl.vampilang.lang.VValue;
-import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.type.TypedVType;
 import com.williambl.vampilang.lang.type.VType;
 import com.williambl.vampilang.stdlib.StandardVTypes;

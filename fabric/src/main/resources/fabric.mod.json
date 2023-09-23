@@ -7,20 +7,24 @@
 	"authors": [
 		"Will BL"
 	],
+	"contributors": [
+		"MerchantPug"
+	],
 	"contact": {
-		"homepage": "https://github.com/williambl/datapackable-predicates",
-		"sources": "https://github.com/williambl/datapackable-predicates"
+		"homepage": "https://github.com/williambl/data-functions",
+		"issues": "https://github.com/williambl/data-functions/issues",
+		"sources": "https://github.com/williambl/data-functions"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/dfunc/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.williambl.dfunc.impl.DataFunctionsMod"
+			"com.williambl.dfunc.impl.DataFunctionsModFabric"
 		]
 	},
 	"mixins": [
-      "dfunc.mixins.json"
+		"dfunc.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.19",

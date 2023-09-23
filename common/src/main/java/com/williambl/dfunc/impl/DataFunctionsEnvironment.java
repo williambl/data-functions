@@ -4,6 +4,9 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.KeyDispatchCodec;
+import com.williambl.dfunc.impl.platform.DataFunctionsServices;
+import com.williambl.dfunc.impl.platform.RegistrationProvider;
+import com.williambl.dfunc.impl.platform.RegistryObject;
 import com.williambl.vampilang.codec.*;
 import com.williambl.vampilang.lang.*;
 import com.williambl.vampilang.lang.function.VFunctionDefinition;
@@ -11,9 +14,7 @@ import com.williambl.vampilang.lang.type.SimpleVType;
 import com.williambl.vampilang.lang.type.VParameterisedType;
 import com.williambl.vampilang.lang.type.VTemplateType;
 import com.williambl.vampilang.lang.type.VType;
-import com.williambl.vampilang.stdlib.StandardVFunctions;
 import com.williambl.vampilang.stdlib.StandardVTypes;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
@@ -148,7 +149,7 @@ public class DataFunctionsEnvironment implements VEnvironment {
             throw new IllegalArgumentException("invalid name %s".formatted(s));
         }
 
-        Registry.register(DataFunctionsMod.TYPE_REGISTRY, name, vType);
+        RegistrationProvider.getOrCreate(DataFunctionsMod.TYPE_REGISTRY_KEY, name.getNamespace()).register(name.getPath(), () -> vType);
     }
 
     @Override
@@ -157,7 +158,7 @@ public class DataFunctionsEnvironment implements VEnvironment {
         if (name == null) {
             throw new IllegalArgumentException("invalid name %s".formatted(s));
         }
-        return DataFunctionsMod.TYPE_REGISTRY.get(name);
+        return DataFunctionsServices.PLATFORM.getVType(name);
     }
 
     @Override
@@ -167,14 +168,14 @@ public class DataFunctionsEnvironment implements VEnvironment {
 
     @Override
     public Map<String, VType> allTypes() {
-        return DataFunctionsMod.TYPE_REGISTRY.entrySet().stream().collect(Collectors.toMap( //TODO cache on registry freeze
+        return DataFunctionsServices.PLATFORM.typeEntrySet().stream().collect(Collectors.toMap( //TODO cache on registry freeze
                 kv -> kv.getKey().location().toString(),
                 Map.Entry::getValue));
     }
 
     @Override
     public TypeNamer createTypeNamer() {
-        Map<VType, String> reversedMap = DataFunctionsMod.TYPE_REGISTRY.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, kv -> kv.getKey().location().toString()));
+        Map<VType, String> reversedMap = DataFunctionsServices.PLATFORM.typeEntrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, kv -> kv.getKey().location().toString()));
         return new TypeNamer(reversedMap);
     }
 

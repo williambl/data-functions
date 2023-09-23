@@ -1,13 +1,13 @@
 package com.williambl.dfunc.api.functions;
 
 import com.williambl.dfunc.api.DTypes;
+import com.williambl.dfunc.impl.platform.DataFunctionsServices;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VValue;
 import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.function.VFunctionSignature;
 import com.williambl.vampilang.stdlib.StandardVTypes;
-import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
@@ -32,7 +32,7 @@ public class LevelDFunctions {
                     .filter(k -> k.getId().equals(args.get("rule").get(StandardVTypes.STRING)))
                     .findFirst()
                     .map(args.get("level").get(DTypes.LEVEL).getGameRules()::getRule)
-                    .map(v -> v instanceof GameRules.IntegerValue i ? (double) i.get() : v instanceof DoubleRule d ? d.get() : null)
+                    .map(v -> DataFunctionsServices.PLATFORM.mapNumberGameRule(v))
                     .orElse(0.0)));
 
     public static final VFunctionDefinition IS_DAY = createFromPredicate("is_day", Level::isDay);

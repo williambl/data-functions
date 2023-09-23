@@ -1,0 +1,29 @@
+modLoader = "javafml"
+loaderVersion = "[46,)"
+license = "C0-1.0"
+issueTrackerURL="https://github.com/williambl/data-functions/issues"
+
+[[mods]]
+modId = "dfunc"
+version = "${file.jarVersion}"
+displayName = "${mod_name}"
+displayURL="https://github.com/williambl/data-functions/"
+logoFile = "dfunc.png"
+credits = "MerchantPug"
+authors = "${mod_author}"
+description = '''
+Allows for data-driven functions for all sorts of things in-game.
+'''
+[[dependencies.dfunc]]
+modId = "forge"
+mandatory = true
+versionRange = "[46,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.dfunc]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20,1.21)"
+ordering = "NONE"
+side = "BOTH"
