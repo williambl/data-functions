@@ -77,8 +77,12 @@ dependencies {
     compileOnly project(":common")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    minecraftLibrary "com.williambl.vampilang:lang:${vampilang_version}"
-    minecraftLibrary "com.williambl.vampilang:stdlib:${vampilang_version}"
+    minecraftLibrary("com.williambl.vampilang:lang:${vampilang_version}") {
+        transitive(false)
+    }
+    minecraftLibrary("com.williambl.vampilang:stdlib:${vampilang_version}") {
+        transitive(false)
+    }
 
     compileOnly group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
     annotationProcessor group:'com.google.auto.service', name:'auto-service', version:'1.0.1'
