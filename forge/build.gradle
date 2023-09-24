@@ -15,6 +15,8 @@ mixin {
     config("${mod_id}.mixins.json")
 }
 
+jarJar.enable()
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
@@ -77,10 +79,12 @@ dependencies {
     compileOnly project(":common")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    minecraftLibrary("com.williambl.vampilang:lang:${vampilang_version}") {
+    minecraftLibrary(jarJar("com.williambl.vampilang:lang:${vampilang_version}")) {
+        jarJar.ranged(it, "[${vampilang_version},)")
         transitive(false)
     }
-    minecraftLibrary("com.williambl.vampilang:stdlib:${vampilang_version}") {
+    minecraftLibrary(jarJar("com.williambl.vampilang:stdlib:${vampilang_version}")) {
+        jarJar.ranged(it, "[${vampilang_version},)")
         transitive(false)
     }
 
@@ -107,7 +111,10 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            artifact jar
         }
     }
 
@@ -120,5 +127,6 @@ publishing {
                 basic(BasicAuthentication)
             }
         }
+        mavenLocal()
     }
 }
