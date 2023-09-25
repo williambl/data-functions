@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/williambl/data-functions/issues"
 [[mods]]
 modId = "dfunc"
 version = "${file.jarVersion}"
-displayName = "${mod_name}"
+displayName = "Data Functions"
 displayURL="https://github.com/williambl/data-functions/"
 logoFile = "dfunc.png"
 credits = "MerchantPug"
