@@ -15,7 +15,7 @@ description = '''
 Allows for data-driven functions for all sorts of things in-game.
 '''
 [[dependencies.dfunc]]
-modId="forge"
+modId="neoforge"
 mandatory=true
 versionRange="[1,)"
 ordering="NONE"
