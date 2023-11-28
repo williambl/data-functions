@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
@@ -31,6 +32,11 @@ public class DataFunctionsModNeoForge {
 
     @Mod.EventBusSubscriber(modid = DataFunctionsMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class DataFunctionsModEvents {
+
+        @SubscribeEvent
+        public static void registerTypeRegistry(NewRegistryEvent event) {
+            event.register(TYPE_REGISTRY);
+        }
 
         @SubscribeEvent
         public static void registerVTypes(RegisterEvent event) {
