@@ -1,23 +1,18 @@
 package com.williambl.dfunc.impl.platform;
 
 import com.google.auto.service.AutoService;
-import com.williambl.dfunc.impl.DataFunctionsMod;
-import com.williambl.dfunc.impl.DataFunctionsModForge;
+import com.williambl.dfunc.impl.DataFunctionsModNeoForge;
 import com.williambl.vampilang.lang.type.VType;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameRules;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.function.Supplier;
 
-@AutoService(IPlatformHelper.class)
-public class ForgePlatformHelper implements IPlatformHelper {
+@AutoService(IDFuncPlatformHelper.class)
+public class NeoForgeDFuncPlatformHelper implements IDFuncPlatformHelper {
 
     @Override
     public String getPlatformName() {
@@ -35,13 +30,13 @@ public class ForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public VType getVType(ResourceLocation name) {
-        return RegistryObject.create(name, DataFunctionsModForge.TYPE_REGISTRY.get()).get();
+    public void registerVType(ResourceLocation name, Supplier<VType> vType) {
+        DataFunctionsModNeoForge.setVTypeToRegister(name, vType);
     }
 
     @Override
-    public Set<Map.Entry<ResourceKey<VType>, VType>> typeEntrySet() {
-        return DataFunctionsModForge.TYPE_REGISTRY.get().getEntries();
+    public Registry<VType> getVTypeRegistry() {
+        return DataFunctionsModNeoForge.TYPE_REGISTRY;
     }
 
     @Override

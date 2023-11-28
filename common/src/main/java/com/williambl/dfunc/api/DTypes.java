@@ -97,9 +97,9 @@ public class DTypes {
         env.registerType("block_in_world", BLOCK_IN_WORLD);
         env.registerType("enchantment", ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.byNameCodec());
         env.registerType("attribute", ATTRIBUTE, BuiltInRegistries.ATTRIBUTE.byNameCodec());
-        env.registerType("item_advancement_predicate", ITEM_ADVANCEMENT_PREDICATE, DataFunctionsMod.ADVANCEMENT_ITEM_PREDICATE_CODEC);
-        env.registerType("block_advancement_predicate", BLOCK_ADVANCEMENT_PREDICATE, DataFunctionsMod.ADVANCEMENT_BLOCK_PREDICATE_CODEC);
-        env.registerType("entity_advancement_predicate", ENTITY_ADVANCEMENT_PREDICATE, DataFunctionsMod.ADVANCEMENT_ENTITY_PREDICATE_CODEC);
+        env.registerType("item_advancement_predicate", ITEM_ADVANCEMENT_PREDICATE, ItemPredicate.CODEC);
+        env.registerType("block_advancement_predicate", BLOCK_ADVANCEMENT_PREDICATE, BlockPredicate.CODEC);
+        env.registerType("entity_advancement_predicate", ENTITY_ADVANCEMENT_PREDICATE, EntityPredicate.CODEC);
         env.registerType("block_worldgen_predicate", BLOCK_WORLDGEN_PREDICATE, net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate.CODEC);
         env.registerType("vec3", VEC3, Vec3.CODEC);
         env.registerType("sound_event", SOUND_EVENT, BuiltInRegistries.SOUND_EVENT.byNameCodec());

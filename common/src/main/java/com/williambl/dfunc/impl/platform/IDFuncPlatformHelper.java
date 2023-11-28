@@ -2,15 +2,14 @@ package com.williambl.dfunc.impl.platform;
 
 import com.williambl.vampilang.lang.type.VType;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameRules;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
-public interface IPlatformHelper {
+public interface IDFuncPlatformHelper {
+
+    public static final IDFuncPlatformHelper INSTANCE = DataFunctionsServiceUtil.load(IDFuncPlatformHelper.class);
 
     /**
      * Gets the name of the current platform
@@ -34,21 +33,14 @@ public interface IPlatformHelper {
      */
     boolean isDevelopmentEnvironment();
 
-    /**
-     * Gets a VType. Calling this method too early
-     * might result in crashes.
-     *
-     * @param name The name of the VType to get.
-     * @return The vtype associated with the name.
-     */
-    VType getVType(ResourceLocation name);
+    void registerVType(ResourceLocation name, Supplier<VType> vType);
 
     /**
-     * Gets an iteratable entrySet for the VType Registry.
+     * Gets the VType registry.
      *
-     * @return A set of map entries with the contents of the registry.
+     * @return The VTYpe registry.
      */
-    Set<Map.Entry<ResourceKey<VType>, VType>> typeEntrySet();
+    Registry<VType> getVTypeRegistry();
 
     /**
      * Maps a number gamerule to a double.

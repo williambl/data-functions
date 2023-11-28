@@ -1,7 +1,8 @@
 package com.williambl.dfunc.api.functions;
 
 import com.williambl.dfunc.api.DTypes;
-import com.williambl.dfunc.impl.platform.DataFunctionsServices;
+import com.williambl.dfunc.impl.platform.DataFunctionsServiceUtil;
+import com.williambl.dfunc.impl.platform.IDFuncPlatformHelper;
 import com.williambl.dfunc.mixin.GameRulesAccessor;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VValue;
@@ -32,7 +33,7 @@ public class LevelDFunctions {
                     .filter(k -> k.getId().equals(args.get("rule").get(StandardVTypes.STRING)))
                     .findFirst()
                     .map(args.get("level").get(DTypes.LEVEL).getGameRules()::getRule)
-                    .map(v -> DataFunctionsServices.PLATFORM.mapNumberGameRule(v))
+                    .map(IDFuncPlatformHelper.INSTANCE::mapNumberGameRule)
                     .orElse(0.0)));
 
     public static final VFunctionDefinition IS_DAY = createFromPredicate("is_day", Level::isDay);

@@ -4,9 +4,7 @@ import com.williambl.dfunc.impl.DataFunctionsMod;
 
 import java.util.ServiceLoader;
 
-public class DataFunctionsServices {
-
-    public static IPlatformHelper PLATFORM = load(IPlatformHelper.class);
+public class DataFunctionsServiceUtil {
 
     public static <T> T load(Class<T> clazz) {
 

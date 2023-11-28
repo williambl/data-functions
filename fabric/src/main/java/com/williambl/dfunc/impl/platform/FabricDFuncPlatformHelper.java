@@ -5,15 +5,17 @@ import com.williambl.dfunc.impl.DataFunctionsModFabric;
 import com.williambl.vampilang.lang.type.VType;
 import net.fabricmc.fabric.api.gamerule.v1.rule.DoubleRule;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameRules;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
-@AutoService(IPlatformHelper.class)
-public class FabricPlatformHelper implements IPlatformHelper {
+@AutoService(IDFuncPlatformHelper.class)
+public class FabricDFuncPlatformHelper implements IDFuncPlatformHelper {
 
     @Override
     public String getPlatformName() {
@@ -31,13 +33,13 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public VType getVType(ResourceLocation name) {
-        return DataFunctionsModFabric.TYPE_REGISTRY.get(name);
+    public void registerVType(ResourceLocation name, Supplier<VType> vType) {
+        Registry.register(DataFunctionsModFabric.TYPE_REGISTRY, name, vType.get());
     }
 
     @Override
-    public Set<Map.Entry<ResourceKey<VType>, VType>> typeEntrySet() {
-        return DataFunctionsModFabric.TYPE_REGISTRY.entrySet();
+    public Registry<VType> getVTypeRegistry() {
+        return DataFunctionsModFabric.TYPE_REGISTRY;
     }
 
     @Override
