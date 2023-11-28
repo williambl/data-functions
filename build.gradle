@@ -54,7 +54,10 @@ subprojects {
 	}
 
 	processResources {
-		inputs.property "version", project.version
+		filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+			expand "version": version
+		}
+		inputs.properties("version": version)
 	}
 
 	// Disables Gradle's custom module metadata from being published to maven. The
