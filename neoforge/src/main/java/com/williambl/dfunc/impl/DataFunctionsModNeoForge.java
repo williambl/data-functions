@@ -19,6 +19,7 @@ public class DataFunctionsModNeoForge {
     protected static boolean hasRegisteredVTypes = false;
 
     public static final Registry<VType> TYPE_REGISTRY = new RegistryBuilder<>(DataFunctionsMod.TYPE_REGISTRY_KEY).create();
+
     public DataFunctionsModNeoForge() {
         DataFunctionsMod.init();
     }
