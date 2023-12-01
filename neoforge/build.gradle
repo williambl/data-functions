@@ -19,12 +19,16 @@ mixin {
 
 jarJar.enable()
 
+configurations {
+    libraries {}
+    implementation.extendsFrom libraries
+}
+
 runs {
     configureEach {
         modSource project.sourceSets.main
         dependencies {
-            runtime "com.williambl.vampilang:lang:${vampilang_version}"
-            runtime "com.williambl.vampilang:stdlib:${vampilang_version}"
+            runtime configuration(project.configurations.libraries)
         }
     }
     client {
@@ -53,11 +57,11 @@ dependencies {
     compileOnly project(":common")
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    implementation(jarJar("com.williambl.vampilang:lang:${vampilang_version}")) {
+    libraries(jarJar("com.williambl.vampilang:lang:${vampilang_version}")) {
         jarJar.ranged(it, "[${vampilang_version},)")
         transitive(false)
     }
-    implementation(jarJar("com.williambl.vampilang:stdlib:${vampilang_version}")) {
+    libraries(jarJar("com.williambl.vampilang:stdlib:${vampilang_version}")) {
         jarJar.ranged(it, "[${vampilang_version},)")
         transitive(false)
     }
