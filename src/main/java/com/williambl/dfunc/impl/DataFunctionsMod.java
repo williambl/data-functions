@@ -32,10 +32,6 @@ public final class DataFunctionsMod implements ModInitializer {
 	public static final String MODID = "dfunc";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-	public static final Codec<EntityPredicate> ADVANCEMENT_ENTITY_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(EntityPredicate::fromJson), EntityPredicate::serializeToJson);
-	public static final Codec<BlockPredicate> ADVANCEMENT_BLOCK_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(BlockPredicate::fromJson), BlockPredicate::serializeToJson);
-	public static final Codec<ItemPredicate> ADVANCEMENT_ITEM_PREDICATE_CODEC = ExtraCodecs.JSON.comapFlatMap(maybeFailParseJson(ItemPredicate::fromJson), ItemPredicate::serializeToJson);
-
 	public static final ResourceKey<Registry<VType>> TYPE_REGISTRY_KEY = ResourceKey.createRegistryKey(id("vtypes"));
 	public static final Registry<VType> TYPE_REGISTRY = FabricRegistryBuilder.createSimple(TYPE_REGISTRY_KEY).buildAndRegister();
 
