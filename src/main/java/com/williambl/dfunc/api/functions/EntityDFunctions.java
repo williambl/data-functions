@@ -66,7 +66,8 @@ public class EntityDFunctions {
                     .map(LivingEntity.class::cast)
                     .map(l -> l.getEffect(args.get("effect").get(DTypes.MOB_EFFECT)))
                     .map(MobEffectInstance::getAmplifier)
-                    .orElse(-1)));
+                    .map(Double::valueOf)
+                    .orElse(-1.0)));
 
     public static final VFunctionDefinition AGE = createSimpleNumber("age", e -> e.tickCount);
     public static final VFunctionDefinition HEALTH = createSimpleNumber("health", e -> e instanceof LivingEntity l ? l.getHealth() : 0.0);
