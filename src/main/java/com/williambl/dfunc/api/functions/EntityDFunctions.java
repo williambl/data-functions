@@ -7,6 +7,7 @@ import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.function.VFunctionSignature;
 import com.williambl.vampilang.stdlib.StandardVTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -56,6 +57,17 @@ public class EntityDFunctions {
             StandardVTypes.BOOLEAN),
             (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l && l.hasEffect(args.get("effect").get(DTypes.MOB_EFFECT))));
 
+    public static final VFunctionDefinition EFFECT_AMPLIFIER = new VFunctionDefinition("effect_amplifier", new VFunctionSignature(Map.of(
+            "effect", DTypes.MOB_EFFECT,
+            "entity", DTypes.ENTITY),
+            StandardVTypes.NUMBER),
+            (ctx, sig, args) -> new VValue(sig.outputType(), Optional.ofNullable(args.get("entity").get(DTypes.ENTITY))
+                    .filter(LivingEntity.class::isInstance)
+                    .map(LivingEntity.class::cast)
+                    .map(l -> l.getEffect(args.get("effect").get(DTypes.MOB_EFFECT)))
+                    .map(MobEffectInstance::getAmplifier)
+                    .orElse(-1)));
+
     public static final VFunctionDefinition AGE = createSimpleNumber("age", e -> e.tickCount);
     public static final VFunctionDefinition HEALTH = createSimpleNumber("health", e -> e instanceof LivingEntity l ? l.getHealth() : 0.0);
     public static final VFunctionDefinition ATTRIBUTE = new VFunctionDefinition("attribute", new VFunctionSignature(Map.of(
@@ -96,6 +108,7 @@ public class EntityDFunctions {
         env.registerFunction(CAN_SEE_SKY);
         env.registerFunction(IS_SURVIVAL_LIKE);
         env.registerFunction(HAS_EFFECT);
+        env.registerFunction(EFFECT_AMPLIFIER);
         env.registerFunction(AGE);
         env.registerFunction(HEALTH);
         env.registerFunction(ATTRIBUTE);
