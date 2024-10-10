@@ -3,6 +3,7 @@ package com.williambl.dfunc.impl;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.KeyDispatchCodec;
 import com.williambl.vampilang.codec.*;
 import com.williambl.vampilang.lang.*;
@@ -88,12 +89,13 @@ public class DataFunctionsEnvironment implements VEnvironment {
     public Codec<List<VExpression>> expressionMultiCodecForType(VType type, EvaluationContext.Spec spec) {
         return this.cachedVExpressionMultiCodecs.computeIfAbsent(new TypeAndSpecCacheKey(type, spec), $ -> new VExpressionCodec(
                 ValueDecoder.createCodec(this, spec, type),
-                KeyDispatchCodec.<VFunctionDefinition, List<VExpression.FunctionApplication>>unsafe("function", Codec.STRING.comapFlatMap(
+                new KeyDispatchCodec<VFunctionDefinition, List<VExpression.FunctionApplication>>("function", Codec.STRING.comapFlatMap(
                                         name -> Optional.ofNullable(this.functions.get(name)).map(DataResult::success).orElse(DataResult.error(() -> "No such function with name " + name)),
                                         VFunctionDefinition::name),
                                 exprs -> exprs.stream().map(expr -> DataResult.success(expr.function())).findFirst().orElse(DataResult.error(() -> "No entry in list!")),
-                                func -> DataResult.success(FunctionApplicationDecoder.createCodec(func, this, spec)),
-                                funcs -> funcs.stream().map(func -> DataResult.success(FunctionApplicationDecoder.createCodec(func.function(), this, spec))).findFirst().orElse(DataResult.error(() -> "No entry in list!"))).codec()
+                                func -> DataResult.success(MapCodec.assumeMapUnsafe(FunctionApplicationDecoder.createCodec(func, this, spec)))//, TODO is this needed, or does the 1.21 constructor fix it
+                                //funcs -> funcs.stream().map(func -> DataResult.success(MapCodec.assumeMapUnsafe(FunctionApplicationDecoder.createCodec(func.function(), this, spec)))).findFirst().orElse(DataResult.error(() -> "No entry in list!"))
+                ).codec()
                         .comapFlatMap(fs -> Optional.of(fs.stream()
                                                 .map(f -> f.resolveTypes(this, spec)
                                                         .flatMap(fr -> type.contains(((VExpression.FunctionApplication) fr).resolvedSignature().outputType())

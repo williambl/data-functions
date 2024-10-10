@@ -36,7 +36,7 @@ public final class DataFunctionsMod implements ModInitializer {
 	public static final Registry<VType> TYPE_REGISTRY = FabricRegistryBuilder.createSimple(TYPE_REGISTRY_KEY).buildAndRegister();
 
 	public static ResourceLocation id(String path) {
-		return new ResourceLocation(MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(MODID, path);
 	}
 
 	@Override
