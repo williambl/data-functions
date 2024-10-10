@@ -6,6 +6,7 @@ import com.williambl.vampilang.lang.VValue;
 import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.function.VFunctionSignature;
 import com.williambl.vampilang.stdlib.StandardVTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -55,7 +56,7 @@ public class EntityDFunctions {
             "effect", DTypes.MOB_EFFECT,
             "entity", DTypes.ENTITY),
             StandardVTypes.BOOLEAN),
-            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l && l.hasEffect(args.get("effect").get(DTypes.MOB_EFFECT))));
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l && l.hasEffect(Holder.direct(args.get("effect").get(DTypes.MOB_EFFECT)))));
 
     public static final VFunctionDefinition EFFECT_AMPLIFIER = new VFunctionDefinition("effect_amplifier", new VFunctionSignature(Map.of(
             "effect", DTypes.MOB_EFFECT,
@@ -64,7 +65,7 @@ public class EntityDFunctions {
             (ctx, sig, args) -> new VValue(sig.outputType(), Optional.ofNullable(args.get("entity").get(DTypes.ENTITY))
                     .filter(LivingEntity.class::isInstance)
                     .map(LivingEntity.class::cast)
-                    .map(l -> l.getEffect(args.get("effect").get(DTypes.MOB_EFFECT)))
+                    .map(l -> l.getEffect(Holder.direct(args.get("effect").get(DTypes.MOB_EFFECT))))
                     .map(MobEffectInstance::getAmplifier)
                     .map(Double::valueOf)
                     .orElse(-1.0)));
@@ -75,12 +76,12 @@ public class EntityDFunctions {
             "attribute", DTypes.ATTRIBUTE,
             "entity", DTypes.ENTITY),
             StandardVTypes.NUMBER),
-            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(args.get("attribute").get(DTypes.ATTRIBUTE))).map(AttributeInstance::getValue).orElse(0.0) : 0.0));
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(Holder.direct(args.get("attribute").get(DTypes.ATTRIBUTE)))).map(AttributeInstance::getValue).orElse(0.0) : 0.0));
     public static final VFunctionDefinition ATTRIBUTE_BASE = new VFunctionDefinition("attribute_base", new VFunctionSignature(Map.of(
             "attribute", DTypes.ATTRIBUTE,
             "entity", DTypes.ENTITY),
             StandardVTypes.NUMBER),
-            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(args.get("attribute").get(DTypes.ATTRIBUTE))).map(AttributeInstance::getBaseValue).orElse(0.0) : 0.0));
+            (ctx, sig, args) -> new VValue(sig.outputType(), args.get("entity").get(DTypes.ENTITY) instanceof LivingEntity l ? Optional.ofNullable(l.getAttribute(Holder.direct(args.get("attribute").get(DTypes.ATTRIBUTE)))).map(AttributeInstance::getBaseValue).orElse(0.0) : 0.0));
 
     public static final VFunctionDefinition POSITION = new VFunctionDefinition("position", new VFunctionSignature(Map.of(
             "entity", DTypes.ENTITY),

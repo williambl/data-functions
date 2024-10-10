@@ -99,7 +99,7 @@ public class DTypes {
         env.registerType("fluid", FLUID, BuiltInRegistries.FLUID.byNameCodec());
         env.registerType("mob_effect", MOB_EFFECT, BuiltInRegistries.MOB_EFFECT.byNameCodec());
         env.registerType("block_in_world", BLOCK_IN_WORLD);
-        env.registerType("enchantment", ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.byNameCodec());
+        env.registerType("enchantment", ENCHANTMENT, Enchantment.DIRECT_CODEC);
         env.registerType("attribute", ATTRIBUTE, BuiltInRegistries.ATTRIBUTE.byNameCodec());
         env.registerType("item_advancement_predicate", ITEM_ADVANCEMENT_PREDICATE, ItemPredicate.CODEC);
         env.registerType("block_advancement_predicate", BLOCK_ADVANCEMENT_PREDICATE, BlockPredicate.CODEC);
