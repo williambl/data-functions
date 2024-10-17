@@ -6,7 +6,6 @@ import com.williambl.vampilang.lang.VValue;
 import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.function.VFunctionSignature;
 import com.williambl.vampilang.stdlib.StandardVTypes;
-import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.Map;
@@ -22,7 +21,7 @@ public class ItemStackDFunctions {
             "enchantment", DTypes.ENCHANTMENT,
             "item", DTypes.ITEM_STACK),
             StandardVTypes.NUMBER),
-            (ctx, sig, arg) -> new VValue(sig.outputType(), (double) EnchantmentHelper.getItemEnchantmentLevel(Holder.direct(arg.get("enchantment").get(DTypes.ENCHANTMENT)), arg.get("item").get(DTypes.ITEM_STACK))));
+            (ctx, sig, arg) -> new VValue(sig.outputType(), (double) EnchantmentHelper.getItemEnchantmentLevel(arg.get("enchantment").get(DTypes.ENCHANTMENT), arg.get("item").get(DTypes.ITEM_STACK))));
 
     public static final VFunctionDefinition TAG = new VFunctionDefinition("tag", new VFunctionSignature(Map.of(
             "tag", DTypes.TAG,
