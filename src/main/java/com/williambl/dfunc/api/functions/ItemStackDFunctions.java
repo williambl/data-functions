@@ -15,7 +15,7 @@ public class ItemStackDFunctions {
             "predicate", DTypes.ITEM_ADVANCEMENT_PREDICATE,
             "item", DTypes.ITEM_STACK),
             StandardVTypes.BOOLEAN),
-            (ctx, sig, arg) -> new VValue(sig.outputType(), arg.get("predicate").get(DTypes.ITEM_ADVANCEMENT_PREDICATE).matches(arg.get("item").get(DTypes.ITEM_STACK))));
+            (ctx, sig, arg) -> new VValue(sig.outputType(), arg.get("predicate").get(DTypes.ITEM_ADVANCEMENT_PREDICATE).test(arg.get("item").get(DTypes.ITEM_STACK))));
 
     public static final VFunctionDefinition ENCHANTMENT_LEVEL = new VFunctionDefinition("enchantment_level", new VFunctionSignature(Map.of(
             "enchantment", DTypes.ENCHANTMENT,

@@ -1,13 +1,11 @@
 package com.williambl.dfunc.api;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.williambl.dfunc.impl.DataFunctionsEnvironment;
 import com.williambl.vampilang.lang.EvaluationContext;
 import com.williambl.vampilang.lang.VEnvironment;
 import com.williambl.vampilang.lang.VExpression;
 import com.williambl.vampilang.lang.VValue;
-import com.williambl.vampilang.lang.function.VFunctionDefinition;
 import com.williambl.vampilang.lang.type.TypedVType;
 import com.williambl.vampilang.lang.type.VType;
 import com.williambl.vampilang.stdlib.StandardVTypes;
@@ -31,11 +29,18 @@ public class DFunctions {
     public static final EvaluationContext.Spec ENTITY_INTERACT_WITH_BLOCK = new EvaluationContext.Spec(Map.of("entity", DTypes.ENTITY, "level", DTypes.LEVEL, "item", DTypes.ITEM_STACK, "block", DTypes.BLOCK_IN_WORLD));
 
     public static EvaluationContext createEntityContext(Entity entity) {
-        return EvaluationContext.builder(ENTITY).addVariable("entity", new VValue(DTypes.ENTITY, entity)).addVariable("level", new VValue(DTypes.LEVEL, entity.level())).build();
+        return EvaluationContext.builder(ENTITY)
+                .addVariable("entity", new VValue(DTypes.ENTITY, entity))
+                .addVariable("level", new VValue(DTypes.LEVEL, entity.level()))
+                .build(ENV);
     }
 
     public static EvaluationContext createEntityTargetContext(Entity entity, Entity target) {
-        return EvaluationContext.builder(ENTITY_TARGET).addVariable("entity", new VValue(DTypes.ENTITY, entity)).addVariable("level", new VValue(DTypes.LEVEL, entity.level())).addVariable("target", new VValue(DTypes.ENTITY, target)).build();
+        return EvaluationContext.builder(ENTITY_TARGET)
+                .addVariable("entity", new VValue(DTypes.ENTITY, entity))
+                .addVariable("level", new VValue(DTypes.LEVEL, entity.level()))
+                .addVariable("target", new VValue(DTypes.ENTITY, target))
+                .build(ENV);
     }
 
     public static EvaluationContext createEntityDamageContext(Entity entity, DamageSource damage, float amount) {
@@ -46,7 +51,7 @@ public class DFunctions {
                 .addVariable("damage_amount", new VValue(StandardVTypes.NUMBER, (double) amount))
                 .addVariable("attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(damage.getEntity())))
                 .addVariable("direct_attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(damage.getDirectEntity())))
-                .build();
+                .build(ENV);
     }
 
     public static EvaluationContext entityDamageWithWeapon(Entity entity, DamageSource source, float amount, ItemStack weapon) {
@@ -58,15 +63,23 @@ public class DFunctions {
                 .addVariable("attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(source.getEntity())))
                 .addVariable("direct_attacker", new VValue(DTypes.OPTIONAL_ENTITY, Optional.ofNullable(source.getDirectEntity())))
                 .addVariable("weapon", new VValue(DTypes.ITEM_STACK, weapon))
-                .build();
+                .build(ENV);
     }
 
     public static EvaluationContext createBlockInWorldContext(BlockInWorld blockInWorld) {
-        return EvaluationContext.builder(BLOCK_IN_WORLD).addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, blockInWorld)).addVariable("level", new VValue(DTypes.LEVEL, blockInWorld.getLevel())).build();
+        return EvaluationContext.builder(BLOCK_IN_WORLD)
+                .addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, blockInWorld))
+                .addVariable("level", new VValue(DTypes.LEVEL, blockInWorld.getLevel()))
+                .build(ENV);
     }
 
     public static EvaluationContext createEntityInteractWithBlockContext(Entity entity, ItemStack item, BlockInWorld block) {
-        return EvaluationContext.builder(ENTITY_INTERACT_WITH_BLOCK).addVariable("entity", new VValue(DTypes.ENTITY, entity)).addVariable("level", new VValue(DTypes.LEVEL, entity.level())).addVariable("item", new VValue(DTypes.ITEM_STACK, item)).addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, block)).build();
+        return EvaluationContext.builder(ENTITY_INTERACT_WITH_BLOCK)
+                .addVariable("entity", new VValue(DTypes.ENTITY, entity))
+                .addVariable("level", new VValue(DTypes.LEVEL, entity.level()))
+                .addVariable("item", new VValue(DTypes.ITEM_STACK, item))
+                .addVariable("block", new VValue(DTypes.BLOCK_IN_WORLD, block))
+                .build(ENV);
     }
 
     public static <T> T evaluate(VExpression expr, EvaluationContext ctx, TypedVType<T> expectedType) {
